@@ -1,38 +1,106 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+@keyframes rotateY {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+@keyframes fade {
+  0% {
+    opacity: 0%;
+  }
+  100% {
+    opacity: 100%;
+  }
+}
+
+body {
+  background-image: url(../public/background.jpg);
+  background-color: darkgreen;
+  font-family: 'Playfair Display', serif;
+}
+
+button {
+  background-color: rgba(0, 0, 0, 0);
+  border-color: rgba(0, 0, 0, 0);;
+  font-family: 'Playfair Display', serif;
+}
+
+.title {
+  display: flex;
+  margin-left: 20px;
+  gap: 1vw;
+}
+
+.title-element {
+  color: goldenrod;
+  font-size: 48px;
+}
+
+.image {
+  height: 16vh;
+  width: 8vw;
+  margin-top: 20px;
+  animation: rotateY 6s linear infinite;
+}
+
+.navbar {
+  display: flex;
+  gap: 4vw;
+  background-color: rgba(0, 100, 0, 0.75);
+  margin-top: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+  border-radius: 10px;
+}
+
+.nav-element{
+  color: goldenrod;
+  font-size: 48px;
+}
+
+.welcome-container {
+  justify-content: center;
+  text-align: center;
+  color: goldenrod;
+  margin-top: 5vh;
+  font-size: 32px;
+  animation-name: fade;
+  animation-duration: 3s;
+}
+
+.welcome-to {
+  margin: 0%;
+}
+
+.choice-container {
+  display: flex;
+  gap: 5vw;
+  margin-top: 5vh;
+  justify-content: center;
+  animation-name: fade;
+  animation-duration: 3s;
+}
+
+.choice {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  min-width: 15vw;
 }
 
-.App-link {
-  color: #61dafb;
+.choice-text {
+  text-align: center;
+  color: goldenrod;
+  font-weight: 600;
+  font-size: 24pt;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.choice-img {
+  width: 10vw;
+  height: 25vh;
+  justify-content: center;
 }
