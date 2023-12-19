@@ -120,6 +120,7 @@ button {
   text-align: center;
   animation-name: fade;
   animation-duration: 3s;
+  margin-bottom: 0px;
 }
 
 .war-container {
@@ -144,6 +145,14 @@ button {
   animation-duration: 3s;
 }
 
+.players-cont {
+  display: flex;
+  gap: 10vw;
+  justify-content: center;
+  color: goldenrod;
+  margin-top: 0px;
+}
+
 .war-card1 {
   width: 10vw;
   height: 25vh;
@@ -156,4 +165,9 @@ button {
   height: 25vh;
   animation-name: fade2;
   animation-duration: 3s;
+}
+
+.winner {
+  color: goldenrod;
+  text-align: center;
 }
