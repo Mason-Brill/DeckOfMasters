@@ -7,7 +7,16 @@
   }
 }
 
-@keyframes fade {
+@keyframes fade1 {
+  0% {
+    opacity: 0%;
+  }
+  100% {
+    opacity: 100%;
+  }
+}
+
+@keyframes fade2 {
   0% {
     opacity: 0%;
   }
@@ -103,4 +112,48 @@ button {
   width: 10vw;
   height: 25vh;
   justify-content: center;
+}
+
+.war-title {
+  font-size: 48pt;
+  color: goldenrod;
+  text-align: center;
+  animation-name: fade;
+  animation-duration: 3s;
+}
+
+.war-container {
+  display: flex;
+  justify-content: center;
+  gap: 10vw;
+  animation-name: fade;
+  animation-duration: 3s;
+}
+
+.play-btn {
+  margin-top: 5vh;
+  font-size: 36pt;
+  color: goldenrod;
+  background-color: rgba(0, 100, 0 , 0.75);
+  border-radius: 20%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 5vh;
+  animation-name: fade;
+  animation-duration: 3s;
+}
+
+.war-card1 {
+  width: 10vw;
+  height: 25vh;
+  animation-name: fade1;
+  animation-duration: 3s;
+}
+
+.war-card2 {
+  width: 10vw;
+  height: 25vh;
+  animation-name: fade2;
+  animation-duration: 3s;
 }
