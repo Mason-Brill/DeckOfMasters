@@ -2,11 +2,11 @@ import React from "react";
 import { useState } from "react";
 import Play from './Play';
 import War from "./War";
+import Blackjack from "./Blackjack";
 
 export default function Choice() {
     const [choiceMade,changeChoiceMade] = useState(true)
     const [gameWar,changegameWar] = useState(false)
-    // eslint-disable-next-line
     const [gameBlackjack,changegameBlackjack] = useState(false)
     // eslint-disable-next-line
     const [gameCrazy,changegameCrazy] = useState(false)
@@ -56,7 +56,8 @@ export default function Choice() {
                 ): 
                 (
                     <>
-                        {gameWar && <War />} {/* Render War component if gameWar state is true */}                        
+                        {gameWar && <War />} {/* Render War component if gameWar state is true */}   
+                        {gameBlackjack && <Blackjack />}                     
                     </>
                 )}
         </>

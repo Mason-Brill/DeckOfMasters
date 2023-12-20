@@ -171,3 +171,36 @@ button {
   color: goldenrod;
   text-align: center;
 }
+
+.cards-container {
+  display: flex;
+  gap: 10vw;
+  justify-content: center;
+  animation-name: fade;
+  animation-duration: 3s;
+}
+
+.game-container {
+  display: flex;
+  gap: 5vw;
+  justify-content: center;
+}
+
+.player-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.player1-cards {
+  display: flex;
+  justify-content: center;
+}
+
+.player1 {
+  animation-name: fade;
+  animation-duration: 3s;
+}
+.player2 {
+  animation-name: fade;
+  animation-duration: 3s;
+}
