@@ -182,7 +182,7 @@ button {
 
 .game-container {
   display: flex;
-  gap: 5vw;
+  gap: 10vw;
   justify-content: center;
 }
 

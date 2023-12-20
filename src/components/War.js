@@ -15,22 +15,15 @@ export default function War(){
     let player2 = 0
 
     function handlecards(){
-        //produce random number for card 1
-        //0-12
-        //0-3 times 100
-
-        //part 1 plus part 2
 
         changeShowcards(false)
         if(switcher === true)
         {
             changeSwitcher(false)
-            console.log("set fasle")
         }
         else
         {
             changeSwitcher(true)
-            console.log("set true")
         }
 
         //generate random number between 0-12
