@@ -38,7 +38,7 @@ export default function War(){
         }
 
         player1 = number1;
-        changecard1(number1+number2);
+        changecard1(number1+number2+1);
         ///////////////////////////////////////////////////////////
         //generate random number between 0-12
         number1 = Math.floor(Math.random() * 13);
@@ -52,7 +52,7 @@ export default function War(){
         }
 
         player2 = number1
-        changecard2(number1+number2);
+        changecard2(number1+number2+1);
 
         if(player1 > player2)
         {
