@@ -1,12 +1,21 @@
-import {React, useState} from "react";
+import {React, useState, useEffect} from "react";
 
 export default function Blackjack(){
     const[first, changeFirst] = useState(true)
-    const[playerCard1, changePlayerCard1] = useState(0)
-    const[playerCard2, changePlayerCard2] = useState(0)
-    const[dealerCard1, changedealerCard1] = useState(0)
-    const[dealerCard2, changedealerCard2] = useState(0)
+    const[playerCards, changePlayerCards] = useState([])
+    const[playerImages, changePlayerImages] = useState([])
+    const[dealerCards, changeDealerCards] = useState([])
+
     const [switcher, changeSwitcher] = useState(true)
+
+    useEffect(() => {
+        // This useEffect will run whenever playerCards is updated
+        console.log(playerImages[0]);
+        if(playerCards.length === 1)
+        {
+            changeFirst(false)
+        }
+    }, [playerCards]);
 
     //two random numbers generated to be used for name of card image i.e. 312.png
     let number1 = 0
@@ -14,7 +23,6 @@ export default function Blackjack(){
     let playersFirst = 0;
 
     function Start() {
-        changeFirst(false)
 
         //this triggers the fade animation
         if(switcher === true)
@@ -26,8 +34,9 @@ export default function Blackjack(){
             changeSwitcher(true)
         }
 
-        //generate random number between 0-12
-        number1 = Math.floor(Math.random() * 13);
+        //generate random number between 1-13
+        number1 = 13//Math.floor(Math.random() * 13) + 1;
+
         //generate random number between 0-3 and times it by 100
         number2 = Math.floor(Math.random() * 4);
         if(number2 === 0){
@@ -37,8 +46,17 @@ export default function Blackjack(){
             number2 = number2 * 100
         }
 
-        playersFirst = number1;
-        changePlayerCard1(number1+number2);
+        //placing the name of the image file for the card in the "playerImages" array
+        changePlayerImages(prevPlayerImages => [...prevPlayerImages, number1 + number2]);
+        // Use the updater function to modify the array
+
+        console.log(number1 + number2)
+
+        if(number1 > 11){
+            number1 = 11
+        }
+        //placing the players card value in the "playerCards" array
+        changePlayerCards(prevPlayerCards => [...prevPlayerCards, number1]);
     }
 
     return(
@@ -71,7 +89,7 @@ export default function Blackjack(){
                     <div className="player-container">
                         <h1 className="war-title">Your Cards:</h1>
                         <div className="player1-cards">
-                            <img className={`${switcher ? "war-card1" : "war-card2"}`} src={`./cards/${playerCard1}.png`} alt="card1"/>
+                            <img className={`${switcher ? "war-card1" : "war-card2"}`} src={`./cards/${playerImages[0]}.png`} alt="card1"/>
                             <img className="war-card1" src="./cards/back.png" alt="card2"/>
                         </div>
                     </div>
@@ -88,34 +106,3 @@ export default function Blackjack(){
         </>
     )
 }
-
-/*
-    <div className="game-container">
-        <div className="player-container">
-            <h1 className="war-title">Your Cards:</h1>
-            <div className="player1-cards">
-                <img className="war-card1" src="./cards/back.png" alt="card1"/>
-                <img className="war-card1" src="./cards/back.png" alt="card2"/>
-            </div>
-        </div>
-        <div className="player-container">
-            <h1 className="war-title">Your Cards:</h1>
-            <div className="player1-cards">
-                <img className="war-card1" src="./cards/back.png" alt="card1"/>
-                <img className="war-card1" src="./cards/back.png" alt="card2"/>
-            </div>
-        </div>
-    </div>
-
-    .game-container {
-        display: flex;
-        gap: 5vw;
-        justify-content: center;
-    }
-
-    .player-container {
-        display: flex;
-        flex-direction: column;
-    }
-
-*/
