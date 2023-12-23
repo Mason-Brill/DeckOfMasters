@@ -5,13 +5,13 @@ export default function Blackjack(){
     const[playerCards, changePlayerCards] = useState([])
     const[playerImages, changePlayerImages] = useState([])
     const[dealerCards, changeDealerCards] = useState([])
+    const[dealerImages, changeDealerImages] = useState([])
 
     const [switcher, changeSwitcher] = useState(true)
 
     useEffect(() => {
         // This useEffect will run whenever playerCards is updated
-        console.log(playerImages[0]);
-        if(playerCards.length === 1)
+        if(playerCards.length === 2)
         {
             changeFirst(false)
         }
@@ -35,7 +35,7 @@ export default function Blackjack(){
         }
 
         //generate random number between 1-13
-        number1 = 13//Math.floor(Math.random() * 13) + 1;
+        number1 = Math.floor(Math.random() * 13) + 1;
 
         //generate random number between 0-3 and times it by 100
         number2 = Math.floor(Math.random() * 4);
@@ -46,17 +46,62 @@ export default function Blackjack(){
             number2 = number2 * 100
         }
 
+        const player1 = number1 + number2
         //placing the name of the image file for the card in the "playerImages" array
-        changePlayerImages(prevPlayerImages => [...prevPlayerImages, number1 + number2]);
-        // Use the updater function to modify the array
-
-        console.log(number1 + number2)
+        changePlayerImages(prevPlayerImages => [...prevPlayerImages, player1]);
 
         if(number1 > 11){
             number1 = 11
         }
+
         //placing the players card value in the "playerCards" array
         changePlayerCards(prevPlayerCards => [...prevPlayerCards, number1]);
+
+        //generate random number between 1-13
+        number1 = Math.floor(Math.random() * 13) + 1;
+
+        //generate random number between 0-3 and times it by 100
+        number2 = Math.floor(Math.random() * 4);
+        if(number2 === 0){
+            number2 = number2 + 100;
+        }
+        else {
+            number2 = number2 * 100
+        }
+
+        const player2 = number1 + number2
+        //placing the name of the image file for the card in the "playerImages" array
+        changePlayerImages(prevPlayerImages => [...prevPlayerImages, player2]);
+
+        if(number1 > 11){
+            number1 = 11
+        }
+
+        //placing the players card value in the "playerCards" array
+        changePlayerCards(prevPlayerCards => [...prevPlayerCards, number1]);
+
+        //generate random number between 1-13
+        number1 = Math.floor(Math.random() * 13) + 1;
+
+        //generate random number between 0-3 and times it by 100
+        number2 = Math.floor(Math.random() * 4);
+        if(number2 === 0){
+            number2 = number2 + 100;
+        }
+        else {
+            number2 = number2 * 100
+        }
+
+        const dealer1 = number1 + number2
+        //placing the name of the image file for the card in the "playerImages" array
+        changeDealerImages(prevDealerImages => [...prevDealerImages, dealer1]);
+
+        if(number1 > 11){
+            number1 = 11
+        }
+
+        //placing the players card value in the "playerCards" array
+        changeDealerCards(prevDealerCards => [...prevDealerCards, number1]);
     }
 
     return(
@@ -90,13 +135,13 @@ export default function Blackjack(){
                         <h1 className="war-title">Your Cards:</h1>
                         <div className="player1-cards">
                             <img className={`${switcher ? "war-card1" : "war-card2"}`} src={`./cards/${playerImages[0]}.png`} alt="card1"/>
-                            <img className="war-card1" src="./cards/back.png" alt="card2"/>
+                            <img className={`${switcher ? "war-card1" : "war-card2"}`} src={`./cards/${playerImages[1]}.png`} alt="card2"/>
                         </div>
                     </div>
                     <div className="player-container">
                         <h1 className="war-title">Dealers Cards:</h1>
                         <div className="player1-cards">
-                            <img className="war-card1" src="./cards/back.png" alt="card1"/>
+                            <img className={`${switcher ? "war-card1" : "war-card2"}`} src={`./cards/${dealerImages[0]}.png`} alt="card1"/>
                             <img className="war-card1" src="./cards/back.png" alt="card2"/>
                         </div>
                     </div>
