@@ -50,6 +50,7 @@ export default function Blackjack(){
         }
 
         const player1 = number1 + number2
+        console.log(player1)
         //placing the name of the image file for the card in the "playerImages" array
         changePlayerImages(prevPlayerImages => [...prevPlayerImages, player1]);
 
@@ -67,15 +68,16 @@ export default function Blackjack(){
         //generate random number between 0-3 and times it by 100
         number2 = Math.floor(Math.random() * 4);
         if(number2 === 0){
-            number2 = number2 + 100;
+            const player2 = number1
+            //placing the name of the image file for the card in the "playerImages" array
+            changePlayerImages(prevPlayerImages => [...prevPlayerImages, player2]);
         }
         else {
             number2 = number2 * 100
+            const player2 = number1 + number2
+            //placing the name of the image file for the card in the "playerImages" array
+            changePlayerImages(prevPlayerImages => [...prevPlayerImages, player2]);
         }
-
-        const player2 = number1 + number2
-        //placing the name of the image file for the card in the "playerImages" array
-        changePlayerImages(prevPlayerImages => [...prevPlayerImages, player2]);
 
         if(number1 > 10){
             number1 = 10
