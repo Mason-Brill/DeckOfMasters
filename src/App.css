@@ -46,6 +46,7 @@ button {
 .title-element {
   color: goldenrod;
   font-size: 48px;
+  margin:auto;
 }
 
 .image {
