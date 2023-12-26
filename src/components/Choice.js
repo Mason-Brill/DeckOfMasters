@@ -3,13 +3,13 @@ import { useState } from "react";
 import Play from './Play';
 import War from "./War";
 import Blackjack from "./Blackjack";
+import Rummy from "./Rummy";
 
 export default function Choice() {
     const [choiceMade,changeChoiceMade] = useState(true)
     const [gameWar,changegameWar] = useState(false)
     const [gameBlackjack,changegameBlackjack] = useState(false)
-    // eslint-disable-next-line
-    const [gameCrazy,changegameCrazy] = useState(false)
+    const [gameRummy,changegameCrazy] = useState(false)
 
 
     function choiceWar() {
@@ -35,20 +35,20 @@ export default function Choice() {
                     <div className="choice-container">
                         <div className="choice">
                             <button onClick={choiceWar}>
-                                <img className="choice-img" src="./cards/312.png" alt="war"/>
+                                <img className="choice-img" src="./cards/313.png" alt="war"/>
                                 <p className="choice-text">War</p>
                             </button>
                         </div>
                         <div className="choice">
                             <button onClick={choiceBlackjack}>
-                                <img className="choice-img" src="./cards/210.png" alt="Blackjack"/>
+                                <img className="choice-img" src="./cards/211.png" alt="Blackjack"/>
                                 <p className="choice-text">Blackjack</p>
                             </button>
                         </div>
                         <div className="choice">
                             <button onClick={choiceCrazy}>
-                                <img className="choice-img" src="./cards/307.png" alt="Crazy Eight's"/>
-                                <p className="choice-text">Crazy Eight's</p>
+                                <img className="choice-img" src="./cards/308.png" alt="Crazy Eight's"/>
+                                <p className="choice-text">Rummy</p>
                             </button>
                         </div>
                     </div>
@@ -56,8 +56,9 @@ export default function Choice() {
                 ): 
                 (
                     <>
-                        {gameWar && <War />} {/* Render War component if gameWar state is true */}   
-                        {gameBlackjack && <Blackjack />}                     
+                        {gameWar && <War/>}
+                        {gameBlackjack && <Blackjack/>}
+                        {gameRummy && <Rummy/>}
                     </>
                 )}
         </>

@@ -50,7 +50,7 @@ export default function Blackjack(){
         }
 
         const player1 = number1 + number2
-        console.log(player1)
+
         //placing the name of the image file for the card in the "playerImages" array
         changePlayerImages(prevPlayerImages => [...prevPlayerImages, player1]);
 
@@ -153,6 +153,11 @@ export default function Blackjack(){
             changeOption(false)
             changeStand(true)
         }
+        if(sump === 21){
+            changeWinner("Blackjack, Player Wins!")
+            changeOption(false)
+            changeStand(true)
+        }
 
     }
 
@@ -191,8 +196,6 @@ export default function Blackjack(){
             // update the sum with the new card value
             sum += number1;
         }  
-
-        console.log(`dealers sum = ${sum}`)
 
         //checking if dealer is greater than player and dealer has not bust
         if((sum > psum) && (sum < 22)){

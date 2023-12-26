@@ -8,7 +8,7 @@ function Home(){
             <div></div>
             <p className="nav-element">War</p>
             <p className="nav-element">Blackjack</p>
-            <p className="nav-element">Crazy Eights</p>
+            <p className="nav-element">Rummy</p>
         </div>
     )
 }
