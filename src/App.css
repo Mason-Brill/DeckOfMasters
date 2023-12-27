@@ -254,3 +254,16 @@ button {
   animation-duration: 1s;
   scale: 1.25;
 }
+
+.stock-container {
+  display: flex;
+  justify-content: center;
+}
+
+.swap-btn {
+  font-size: 36pt;
+  color: goldenrod;
+  background-color: rgba(0, 100, 0 , 0.75);
+  border-radius: 20%;
+  display: block;
+}
