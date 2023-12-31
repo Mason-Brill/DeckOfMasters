@@ -283,7 +283,8 @@ button {
 .options-container {
   display: flex;
   gap: 2vw;
-  margin: 5vw;
+  margin-left: 5vw;
+  margin-right: 5vw;
 }
 
 .players-card:hover {
@@ -311,5 +312,16 @@ button {
 
 .meld-cards {
   display: flex;
-  gap: 0;
+  gap: 0%;
+}
+
+.meld-run-container {
+  display: flex;
+  justify-content: center;
+  gap: 5vw;
+  margin-top: 0;
+}
+
+.mr-cards {
+  text-align: center;
 }

@@ -39,6 +39,11 @@ export default function Rummy() {
     const[playerImages, changePlayerImages] = useState([])
     const[dealerCards, changeDealerCards] = useState([])
 
+    const[meldCards, changemeldCards] = useState([[]])
+    const[meldImages, changemeldImages] = useState([[]])
+    const[runCards, changerunCards] = useState([[]])
+    const[runImages, changerunImages] = useState([[]])
+
     let random1 = 0
     let random2 = 0
     let random3 = 0
@@ -257,11 +262,77 @@ export default function Rummy() {
     }
 
     function meld() {
+        if(meld1Value === meld2Value && meld1Value === meld3Value && meld1Image != "back"){
+            //creating buffer array and copying values from 'meldCards'
+            const bufferMeldCards = meldCards.map(row => [...row]);
+            //creating row to add to meldCards
+            const newMeldHand = [meld1Value,meld2Value,meld3Value]
+            //adding new set of meld cards to bufferArray
+            bufferMeldCards.push(newMeldHand)
+            //changing meldCards
+            changemeldCards(bufferMeldCards)
 
+            //creating buffer array and copying values from 'meldCards'
+            const bufferMeldImages = meldImages.map(row => [...row]);
+            //creating row to add to meldCards
+            const newMeldImages = [meld1Image,meld2Image,meld3Image]
+            //adding new set of meld cards to bufferArray
+            bufferMeldImages.push(newMeldImages)
+            //changing meldCards
+            changemeldImages(bufferMeldImages)
+
+            const bufferPlayerCard = playerCards
+            const bufferPlayerImages = playerImages
+
+            bufferPlayerCard.splice(meld1Image,1)
+            bufferPlayerImages.splice(meld1Index,1)
+            bufferPlayerCard.splice(meld2Image,1)
+            bufferPlayerImages.splice(meld2Index,1)
+            bufferPlayerCard.splice(meld3Image,1)
+            bufferPlayerImages.splice(meld3Index,1)
+
+            //resetting values
+            remove1()
+            remove2()
+            remove3()
+        }
     }
 
     function run() {
+        if(meld1Value === (meld2Value - 1) && meld1Value === (meld3Value - 2)){
+            //creating buffer array and copying values from 'meldCards'
+            const bufferRunCards = runCards.map(row => [...row]);
+            //creating row to add to meldCards
+            const newRunHand = [meld1Value,meld2Value,meld3Value]
+            //adding new set of meld cards to bufferArray
+            bufferRunCards.push(newRunHand)
+            //changing meldCards
+            changerunCards(bufferRunCards)
 
+            //creating buffer array and copying values from 'meldCards'
+            const bufferRunImages = runImages.map(row => [...row]);
+            //creating row to add to meldCards
+            const newRunImages = [meld1Image,meld2Image,meld3Image]
+            //adding new set of meld cards to bufferArray
+            bufferRunImages.push(newRunImages)
+            //changing meldCards
+            changerunImages(bufferRunImages)
+
+            const bufferPlayerCard = playerCards
+            const bufferPlayerImages = playerImages
+
+            bufferPlayerCard.splice(meld1Image,1)
+            bufferPlayerImages.splice(meld1Index,1)
+            bufferPlayerCard.splice(meld2Image,1)
+            bufferPlayerImages.splice(meld2Index,1)
+            bufferPlayerCard.splice(meld3Image,1)
+            bufferPlayerImages.splice(meld3Index,1)
+
+            //resetting values
+            remove1()
+            remove2()
+            remove3()
+        }
     }
     return (
         <>
@@ -503,6 +574,43 @@ export default function Rummy() {
                                 Run?
                             </button>
                     </div>
+                    <div className="meld-run-container">
+                        <div className="mr-cards">
+                            <h1 className="war-title">Meld Hands:</h1>
+                            {meldImages.map((row, rowIndex) => (
+                                <div key={rowIndex}>
+                                    {row.map((card, columnIndex) => (
+                                    <img
+                                        key={`${rowIndex}-${columnIndex}`}
+                                        className="players-card"
+                                        src={`./cards/${card}.png`}
+                                        alt={`card${rowIndex}-${columnIndex}`}
+                                    />
+                                    ))}
+                                </div>
+                            ))}
+                        </div>
+                        <div className="mr-cards">
+                            <h1 className="war-title">Run Hands:</h1>
+                            {runImages.map((row, rowIndex) => (
+                                <div key={rowIndex}>
+                                    {row.map((card, columnIndex) => (
+                                    <img
+                                        key={`${rowIndex}-${columnIndex}`}
+                                        className="players-card"
+                                        src={`./cards/${card}.png`}
+                                        alt={`card${rowIndex}-${columnIndex}`}
+                                    />
+                                    ))}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </>
+                }
+                {third &&
+                <>
+
                 </>
                 }
             </>
