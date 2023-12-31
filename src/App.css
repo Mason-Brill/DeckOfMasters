@@ -43,6 +43,17 @@
   }
 }
 
+@keyframes highlight {
+  0% {
+    color: goldenrod; /* Set the color you want for the highlight */
+  }
+  50% {
+    color: white; /* Same color to create a solid highlight */
+  }
+  100% {
+    color: goldenrod; /* Set the original text color */
+  }
+}
 body {
   background-image: url(../public/background.jpg);
   background-color: darkgreen;
@@ -257,10 +268,22 @@ button {
   flex-wrap: wrap;
   width: 40vw;
 }
+.player2-cards {
+  display: flex;
+  flex-wrap: wrap;
+  width: 40vw;
+  height: 10vh;
+}
 
 .players-card {
   width: 8vw;
   height: 20vh; /* Set the initial size to 20%, minus some space for margins/padding */ /* Include padding and border in the element's total width and height */
+}
+
+.options-container {
+  display: flex;
+  gap: 2vw;
+  margin: 5vw;
 }
 
 .players-card:hover {
@@ -271,13 +294,22 @@ button {
 
 .stock-container {
   display: flex;
-  justify-content: center;
 }
 
-.swap-btn {
+.draw-card {
   font-size: 36pt;
   color: goldenrod;
-  background-color: rgba(0, 100, 0 , 0.75);
-  border-radius: 20%;
-  display: block;
+  animation: highlight 1.5s linear infinite;
+
+}
+
+.meld-title {
+  color: goldenrod;
+  font: 24pt;
+  animation: highlight 1.5s linear infinite;
+}
+
+.meld-cards {
+  display: flex;
+  gap: 0;
 }

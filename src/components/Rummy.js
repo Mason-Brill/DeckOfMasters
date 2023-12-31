@@ -240,17 +240,28 @@ export default function Rummy() {
 
     function remove1() {
         changemeld1Value(0)
+        changemeld1Index(null)
         changemeld1Image("back")
     }
 
     function remove2() {
         changemeld2Value(0)
+        changemeld2Index(null)
         changemeld2Image("back")
     }
 
     function remove3() {
         changemeld3Value(0)
+        changemeld3Index(null)
         changemeld3Image("back")
+    }
+
+    function meld() {
+
+    }
+
+    function run() {
+
     }
     return (
         <>
@@ -322,7 +333,7 @@ export default function Rummy() {
                             );
                         })}
                         </div>
-                        <div className="players-cards">
+                        <div className="player2-cards">
                             {dealerCards.slice(0, 10).map((card, outerIndex) => (
                                 <div key={outerIndex}>
                                 <img
@@ -334,15 +345,18 @@ export default function Rummy() {
                         </div>
                     </div>
 
-
-                    <h1 className="war-title">Pick a card to draw</h1>
-                    <div className="stock-container">
-                        <button onClick={hiddenClicked}>
-                            <img className="players-card" src="./cards/back.png" alt="stockblank"/>
-                        </button>
-                        <button onClick={stockClciked}>
-                            <img className="players-card" src={`./cards/${stockImage}.png`} alt="stockcard"/>
-                        </button>
+                    <div className="options-container">
+                        <div>
+                            <h1 className="draw-card">Pick a card to draw</h1>
+                            <div className="stock-container">
+                                <button onClick={hiddenClicked}>
+                                    <img className="players-card" src="./cards/back.png" alt="stockblank"/>
+                                </button>
+                                <button onClick={stockClciked}>
+                                    <img className="players-card" src={`./cards/${stockImage}.png`} alt="stockcard"/>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </>
                 }
@@ -439,18 +453,15 @@ export default function Rummy() {
                                 </div>
                             );
                         })}
-                        <h1 className="war-title">Choose cards to Meld/Run</h1>
-                        <button onClick={remove1}>
-                            <img src={`./cards/${meld1Image}.png`} alt="first meld card"/>
-                        </button>
-                        <button onClick={remove2}>
-                            <img src={`./cards/${meld2Image}.png`} alt="second meld card"/>
-                        </button>
-                        <button onClick={remove3}>
-                            <img src={`./cards/${meld3Image}.png`} alt="third meld card"/>
-                        </button>
+                            {/* 
+                            add button that calls a function that changes 'second' to false
+                            and 'third' to true, and takes the value of each
+                            'meld#Value/meld#Image' and creates a new HTML element with the
+                            melded cards in it and remove these cards from the users hand
+                            
+                        */}
                         </div>
-                        <div className="players-cards">
+                        <div className="player2-cards">
                             {dealerCards.map((card, outerIndex) => (
                                 <div key={outerIndex}>
                                 <img
@@ -461,14 +472,36 @@ export default function Rummy() {
                             ))}
                         </div>
                     </div>
-
-                    <div className="stock-container">
-                        <button>
-                            <img className="players-card" src="./cards/back.png" alt="stockblank"/>
-                        </button>
-                        <button>
-                            <img className="players-card" src={`./cards/${stockImage}.png`} alt="stockcard"/>
-                        </button>
+                    <div className="options-container">
+                        <div className="stock-container">
+                            <button>
+                                <img className="players-card" src="./cards/back.png" alt="stockblank"/>
+                            </button>
+                            <button>
+                                <img className="players-card" src={`./cards/${stockImage}.png`} alt="stockcard"/>
+                            </button>
+                        </div>
+                            <div>
+                                <h1 className="meld-title">Choose cards to Meld/Run</h1>
+                                <h1 className="meld-title">place cards in increasing order</h1>
+                            </div>
+                            <div className="meld-cards">
+                                <button onClick={remove1}>
+                                    <img src={`./cards/${meld1Image}.png`} alt="first meld card"/>
+                                </button>
+                                <button onClick={remove2}>
+                                    <img src={`./cards/${meld2Image}.png`} alt="second meld card"/>
+                                </button>
+                                <button onClick={remove3}>
+                                    <img src={`./cards/${meld3Image}.png`} alt="third meld card"/>
+                                </button>
+                            </div>
+                            <button className="play-btn" onClick={meld}>
+                                Meld?
+                            </button>
+                            <button className="play-btn" onClick={run}>
+                                Run?
+                            </button>
                     </div>
                 </>
                 }
