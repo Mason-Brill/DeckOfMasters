@@ -166,7 +166,7 @@ export default function Blackjack(){
         let sum = dealerCards[0]
         const psum = playerCards.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
 
-        while(sum < 16)
+        while(sum < 17)
         {
             //generate random number between 1-13
             number1 = Math.floor(Math.random() * 13) + 1;

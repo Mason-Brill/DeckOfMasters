@@ -1,36 +1,66 @@
 import {React, useState} from "react";
 
 export default function Rummy() {
-    const [start, changeStart] = useState(true)
+    const [rounds, changeRounds] = useState(true)
+    const [start, changeStart] = useState(false)
     const [drawing, changeDrawing] = useState(false)
     const [first, changeFirst] = useState(false)
+    const [second, changeSecond] = useState(false)
+    const [third, changeThird] = useState(false)
     const [switcher, changeSwitcher] = useState(false)
-    const [swapCard, enableswapCard] = useState(false)
-    const [deckCard, enableDeckCard] = useState(false)
+    const [numRounds, changenumRounds] = useState(0)
+    const [starter, changeStarter] = useState("")
 
+    //cards used when determing who draws first
     const [card1, changeCard1] = useState("back")
     const [card2, changeCard2] = useState("back")
-    //const [value1, changeValue1] = useState(0)
-    //const [value2, changeValue2] = useState(0)
-    const [starter, changeStarter] = useState("")
+
+    //states for the cards the player is choosing to meld/run
+    const [meld1Image, changemeld1Image] = useState("back")
+    const [meld2Image, changemeld2Image] = useState("back")
+    const [meld3Image, changemeld3Image] = useState("back")
+    const [meld1Value, changemeld1Value] = useState(0)
+    const [meld2Value, changemeld2Value] = useState(0)
+    const [meld3Value, changemeld3Value] = useState(0)
+    const [meld1Index, changemeld1Index] = useState(null)
+    const [meld2Index, changemeld2Index] = useState(null)
+    const [meld3Index, changemeld3Index] = useState(null)
+
+    //cards used when player is determing which card to swap at start of players turn
     const [stockCard, changeStock] = useState(0)
     const [stockImage, changeStockImage] = useState("")
+    const [hiddenCard, changehiddenCard] = useState(0)
+    const [hiddenImage, changehiddenImage] = useState("")
 
-    const [PlayerscardtoSwap, changePlayerscardtoSwap] = useState(0)
-    const [PlayersimagetoSwap, changePlayersimagetoSwap] = useState("")
-    const [StockcardtoSwap, changeStockcardtoSwap] = useState(0)
-    const [StockimagetoSwap, changeStockimagetoSwap] = useState("")
-    const [playersIndex, changeplayersIndex] = useState(0)
+    //might need this...
+    //const [playersIndex, changeplayersIndex] = useState(0)
 
     const[playerCards, changePlayerCards] = useState([])
     const[playerImages, changePlayerImages] = useState([])
     const[dealerCards, changeDealerCards] = useState([])
-    //const[dealerImages, changeDealerImages] = useState([])
 
     let random1 = 0
     let random2 = 0
     let random3 = 0
     let random4 = 0
+
+    function oneRound() {
+        changenumRounds(1)
+        changeRounds(false)
+        changeStart(true)
+    }
+
+    function twoRound() {
+        changenumRounds(2)
+        changeRounds(false)
+        changeStart(true)
+    }
+
+    function threeRound() {
+        changenumRounds(3)
+        changeRounds(false)
+        changeStart(true)
+    }
 
     function starting() {
         //this triggers the fade animation
@@ -73,11 +103,12 @@ export default function Rummy() {
         changeStart(false)
         changeDrawing(true)
 
+        //checking if player is higher than dealer, meaning dealer starts
         if(random1 > random3){
-            changeStarter("Player 1")
+            changeStarter("Player 2")
         }
         else if(random3 > random1) {
-            changeStarter("Player 2")
+            changeStarter("Player 1")
         }
         else if(random1 === random3){
             changeStarter("Tie, draw again!")
@@ -96,7 +127,7 @@ export default function Rummy() {
         const PlayersNumbers = Array.from({ length: 10 }, () => getRandomNumber(1, 13));
 
         //const DealersImages = Array.from({ length: 10 }, () => getRandomNumber(1, 3));
-        const PlayersImages = Array.from({ length: 10 }, () => getRandomNumber(1, 3));
+        const PlayersImages = Array.from({ length: 10 }, () => getRandomNumber(1, 4));
 
         changeDealerCards(DealersNumbers);
         changePlayerCards(PlayersNumbers);
@@ -126,215 +157,132 @@ export default function Rummy() {
         changeFirst(true)
     }
 
-    function cardSwap0() {
-        enableswapCard(true)
-        changePlayerscardtoSwap(playerCards[0])
-        if(playerCards[0] < 10)
-        {
-            changePlayersimagetoSwap(`${playerImages[0]}0${playerCards[0]}`)
-            console.log(`${playerImages[0]}0${playerCards[0]}`)
-        }
-        else {
-            changePlayersimagetoSwap(`${playerImages[0]}${playerCards[0]}`)
-            console.log(`${playerImages[0]}${playerCards[0]}`)
-        }
-        changeplayersIndex(0)
-    }
 
-    function cardSwap1() {
-        enableswapCard(true)
-        changePlayerscardtoSwap(playerCards[1])
-        if(playerCards[1] < 10)
-        {
-            changePlayersimagetoSwap(`${playerImages[1]}0${playerCards[1]}`)
-            console.log(`${playerImages[1]}0${playerCards[1]}`)
-        }
-        else {
-            changePlayersimagetoSwap(`${playerImages[1]}${playerCards[1]}`)
-            console.log(`${playerImages[1]}${playerCards[1]}`)
-        }
-        changeplayersIndex(1)
-    }
 
-    function cardSwap2() {
-        enableswapCard(true)
-        changePlayerscardtoSwap(playerCards[2])
-        if(playerCards[2] < 10)
-        {
-            changePlayersimagetoSwap(`${playerImages[2]}0${playerCards[2]}`)
-            console.log(`${playerImages[2]}0${playerCards[2]}`)
-        }
-        else {
-            changePlayersimagetoSwap(`${playerImages[2]}${playerCards[2]}`)
-            console.log(`${playerImages[2]}${playerCards[2]}`)
-        }
-        changeplayersIndex(2)
-    }
+    // Function to append a new value to the array
+    const appendToPlayerCards = (cardValue) => {
+        // Use the setMyArray function to update the state
+        changePlayerCards((prevPlayerImages) => [...prevPlayerImages, cardValue]);
+    };
 
-    function cardSwap3() {
-        enableswapCard(true)
-        changePlayerscardtoSwap(playerCards[3])
-        if(playerCards[3] < 10)
-        {
-            changePlayersimagetoSwap(`${playerImages[3]}0${playerCards[3]}`)
-            console.log(`${playerImages[3]}0${playerCards[3]}`)
-        }
-        else {
-            changePlayersimagetoSwap(`${playerImages[3]}${playerCards[3]}`)
-            console.log(`${playerImages[3]}${playerCards[3]}`)
-        }
-        changeplayersIndex(3)
-    }
+    // Function to append a new value to the array
+    const appendToPlayerImages = (cardImage) => {
+        // Use the setMyArray function to update the state
+        changePlayerImages((prevPlayerImages) => [...prevPlayerImages, cardImage]);
+    };
 
-    function cardSwap4() {
-        enableswapCard(true)
-        changePlayerscardtoSwap(playerCards[4])
-        if(playerCards[4] < 10)
-        {
-            changePlayersimagetoSwap(`${playerImages[4]}0${playerCards[4]}`)
-            console.log(`${playerImages[4]}0${playerCards[4]}`)
-        }
-        else {
-            changePlayersimagetoSwap(`${playerImages[4]}${playerCards[4]}`)
-            console.log(`${playerImages[4]}${playerCards[4]}`)
-        }
-        changeplayersIndex(4)
-    }
+    const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-    function cardSwap5() {
-        enableswapCard(true)
-        changePlayerscardtoSwap(playerCards[5])
-        if(playerCards[5] < 10)
-        {
-            changePlayersimagetoSwap(`${playerImages[5]}0${playerCards[5]}`)
-            console.log(`${playerImages[5]}0${playerCards[5]}`)
-        }
-        else {
-            changePlayersimagetoSwap(`${playerImages[5]}${playerCards[5]}`)
-            console.log(`${playerImages[5]}${playerCards[5]}`)
-        }
-        changeplayersIndex(5)
-    }
+    function hiddenClicked() {
 
-    function cardSwap6() {
-        enableswapCard(true)
-        changePlayerscardtoSwap(playerCards[6])
-        if(playerCards[6] < 10)
-        {
-            changePlayersimagetoSwap(`${playerImages[6]}0${playerCards[6]}`)
-            console.log(`${playerImages[6]}0${playerCards[6]}`)
-        }
-        else {
-            changePlayersimagetoSwap(`${playerImages[6]}${playerCards[6]}`)
-            console.log(`${playerImages[6]}${playerCards[6]}`)
-        }
-        changeplayersIndex(6)
-    }
+        appendToPlayerCards(getRandomNumber(1,13))
+        appendToPlayerImages(getRandomNumber(1,4))
 
-    function cardSwap7() {
-        enableswapCard(true)
-        changePlayerscardtoSwap(playerCards[7])
-        if(playerCards[7] < 10)
-        {
-            changePlayersimagetoSwap(`${playerImages[7]}0${playerCards[7]}`)
-            console.log(`${playerImages[7]}0${playerCards[7]}`)
-        }
-        else {
-            changePlayersimagetoSwap(`${playerImages[7]}${playerCards[7]}`)
-            console.log(`${playerImages[7]}${playerCards[7]}`)
-        }
-        changeplayersIndex(7)
-    }
-
-    function cardSwap8() {
-        enableswapCard(true)
-        changePlayerscardtoSwap(playerCards[8])
-        if(playerCards[8] < 10)
-        {
-            changePlayersimagetoSwap(`${playerImages[8]}0${playerCards[8]}`)
-            console.log(`${playerImages[8]}0${playerCards[8]}`)
-        }
-        else {
-            changePlayersimagetoSwap(`${playerImages[8]}${playerCards[8]}`)
-            console.log(`${playerImages[8]}${playerCards[8]}`)
-        }
-        changeplayersIndex(8)
-    }
-
-    function cardSwap9() {
-        enableswapCard(true)
-        changePlayerscardtoSwap(playerCards[9])
-        if(playerCards[9] < 10)
-        {
-            changePlayersimagetoSwap(`${playerImages[9]}0${playerCards[9]}`)
-            console.log(`${playerImages[9]}0${playerCards[9]}`)
-        }
-        else {
-            changePlayersimagetoSwap(`${playerImages[9]}${playerCards[9]}`)
-            console.log(`${playerImages[9]}${playerCards[9]}`)
-        }
-        changeplayersIndex(9)
+        changeSecond(true)
+        changeFirst(false)
     }
 
     function stockClciked() {
-        enableDeckCard(true)
-        changeStockcardtoSwap(stockCard)
-        if(stockCard < 10){
-            changeStockimagetoSwap(`${stockImage}`)
-            console.log(`${stockImage}`)
+
+        appendToPlayerCards(stockCard)
+        appendToPlayerImages(parseInt(stockImage.toString()[0], 10))
+        
+        const firstNum = getRandomNumber(1,13)
+        const secondNum = getRandomNumber(1,4)
+
+        changeStock(firstNum)
+
+        if(firstNum < 10){
+            changeStockImage(`${secondNum}0${firstNum}`)
         }
-        else {
-            changeStockimagetoSwap(`${stockImage}`)
-            console.log(`${stockImage}`)
+        else{
+            changeStockImage(`${secondNum}${firstNum}`)
+        }
+
+        changeSecond(true)
+        changeFirst(false)
+    }
+
+    function cardClicked(index){
+        if((index !== meld1Index) && (index !== meld2Index) && (index !== meld3Index)){
+            if(meld1Value === 0){
+                    changemeld1Index(index)
+                    changemeld1Value(playerCards[index])
+                    if(playerCards[index]<10){
+                        changemeld1Image(`${playerImages[index]}0${playerCards[index]}`)
+                    }
+                    else{
+                        changemeld1Image(`${playerImages[index]}${playerCards[index]}`)
+                    }
+            }
+            else if(meld2Value === 0){
+                changemeld2Index(index)
+                changemeld2Value(playerCards[index])
+                if(playerCards[index]<10){
+                    changemeld2Image(`${playerImages[index]}0${playerCards[index]}`)
+                }
+                else{
+                    changemeld2Image(`${playerImages[index]}${playerCards[index]}`)
+                }
+            }
+            else if(meld3Value === 0){
+                changemeld3Index(index)
+                changemeld3Value(playerCards[index])
+                if(playerCards[index]<10){
+                    changemeld3Image(`${playerImages[index]}0${playerCards[index]}`)
+                }
+                else{
+                    changemeld3Image(`${playerImages[index]}${playerCards[index]}`)
+                }
+            }
         }
     }
 
-    function swapping() {
-        if(deckCard && swapCard){
-            const thePlayersCard = PlayerscardtoSwap
-            const thePlayersImage = PlayersimagetoSwap
-            const theStocksCard = StockcardtoSwap
-            const theStocksImage = StockimagetoSwap[0]
-            const thePlayersIndex = playersIndex
-
-            changeStock(thePlayersCard)
-            changeStockImage(thePlayersImage)
-
-            changePlayerCards(prevPlayerCards => {
-                const updatedPlayerCards = [...prevPlayerCards];
-                updatedPlayerCards[thePlayersIndex] = theStocksCard;
-                return updatedPlayerCards;
-              });
-
-            changePlayerImages(prevPlayerImages => {
-            const updatedPlayerCards = [...prevPlayerImages];
-            updatedPlayerCards[thePlayersIndex] = theStocksImage;
-            return updatedPlayerCards;
-            });
-        }
-        enableDeckCard(false)
-        enableswapCard(false)
+    function remove1() {
+        changemeld1Value(0)
+        changemeld1Image("back")
     }
 
+    function remove2() {
+        changemeld2Value(0)
+        changemeld2Image("back")
+    }
+
+    function remove3() {
+        changemeld3Value(0)
+        changemeld3Image("back")
+    }
     return (
         <>
-            {start ? (
+            {rounds ? (
             <>
                 <h1 className="war-title">Rummy</h1>
-                <h2 className="rum-text">Draw a card to determine who starts!</h2>
-                <h2 className="rum-text">{starter}</h2>
-                <div className="players-cont">
-                    <h1 className="player1">Player 1</h1>
-                    <h1 className="player2">Player 2</h1>
+                <h2 className="war-title">How many rounds would you like to play:</h2>
+                <div className="rounds-container">
+                    <button className="rounds-element" onClick={oneRound}>1</button>
+                    <button className="rounds-element" onClick={twoRound}>2</button>
+                    <button className="rounds-element" onClick={threeRound}>3</button>
                 </div>
-                <div className="war-container">
-                    <img className={`${switcher ? "war-card1" : "war-card2"}`}  src={`./cards/${card1}.png`} alt="card1"/>
-                    <img className={`${switcher ? "war-card1" : "war-card2"}`}  src={`./cards/${card2}.png`} alt="card2"/>
-                </div>
-                <button className="play-btn" onClick={starting}>Play!</button>
             </>
             ):(
-            <>
+            <> 
+                {start &&
+                <>
+                    <h1 className="war-title">Rummy</h1>
+                    <h2 className="rum-text">Draw a card to determine who starts!</h2>
+                    <h2 className="rum-text">{starter}</h2>
+                    <div className="players-cont">
+                        <h1 className="player1">Player 1</h1>
+                        <h1 className="player2">Player 2</h1>
+                    </div>
+                    <div className="war-container">
+                        <img className={`${switcher ? "war-card1" : "war-card2"}`}  src={`./cards/${card1}.png`} alt="card1"/>
+                        <img className={`${switcher ? "war-card1" : "war-card2"}`}  src={`./cards/${card2}.png`} alt="card2"/>
+                    </div>
+                    <button className="play-btn" onClick={starting}>Play!</button>
+                </>
+                }
+
                 {drawing &&
                 <>
                     <h1 className="war-title">Rummy</h1>
@@ -361,49 +309,9 @@ export default function Rummy() {
                     <div className="game-container">
                         <div className="players-cards">
                         {playerCards.slice(0, 10).map((card, outerIndex) => {
-
-                            const handleClick = () => {
-                                // Call the function directly
-                                switch (outerIndex) {
-                                    case 0:
-                                        cardSwap0();
-                                        break;
-                                    case 1:
-                                        cardSwap1();
-                                        break;
-                                    case 2:
-                                        cardSwap2();
-                                        break;
-                                    case 3:
-                                        cardSwap3();
-                                        break;
-                                    case 4:
-                                        cardSwap4();
-                                        break;
-                                    case 5:
-                                        cardSwap5();
-                                        break;
-                                    case 6:
-                                        cardSwap6();
-                                        break;
-                                    case 7:
-                                        cardSwap7();
-                                        break;
-                                    case 8:
-                                        cardSwap8();
-                                        break;
-                                    case 9:
-                                        cardSwap9();
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                console.log(playerImages[9])
-                            }
-
                             return (
                                 <div key={outerIndex}>
-                                  <button onClick={handleClick}>
+                                    <button>
                                         <img
                                             className="players-card"
                                             src={`./cards/${playerImages[outerIndex]}${card < 10 ? '0' : ''}${card}.png`}
@@ -425,13 +333,142 @@ export default function Rummy() {
                             ))}
                         </div>
                     </div>
-                    <h1 className="war-title">Stock</h1>
+
+
+                    <h1 className="war-title">Pick a card to draw</h1>
                     <div className="stock-container">
-                        <img className="players-card" src="./cards/back.png" alt="stockblank"/>
+                        <button onClick={hiddenClicked}>
+                            <img className="players-card" src="./cards/back.png" alt="stockblank"/>
+                        </button>
                         <button onClick={stockClciked}>
                             <img className="players-card" src={`./cards/${stockImage}.png`} alt="stockcard"/>
                         </button>
-                        <button onClick={swapping} className="swap-btn">Swap!</button>
+                    </div>
+                </>
+                }
+                {second &&
+                <>
+                    <h1 className="war-title">Rummy</h1>
+                    <div className="game-container">
+                        <h2 className="war-title">Your Cards:</h2>
+                        <h2 className="war-title">Dealers Cards:</h2>
+                    </div>
+                    <div className="game-container">
+                        <div className="players-cards">
+                        {playerCards.map((card, outerIndex) => {
+
+                            let index = 0
+
+                            const handleClick = () => {
+                                //each card is assigned its own function when clicked so we know what card is clicked
+                                switch (outerIndex) {
+                                    case 0:
+                                        index = 0;
+                                        break;
+                                    case 1:
+                                        index = 1;
+                                        break;
+                                    case 2:
+                                        index = 2;
+                                        break;
+                                    case 3:
+                                        index = 3;
+                                        break;
+                                    case 4:
+                                        index = 4;
+                                        break;
+                                    case 5:
+                                        index = 5;
+                                        break;
+                                    case 6:
+                                        index = 6;
+                                        break;
+                                    case 7:
+                                        index = 7;
+                                        break;
+                                    case 8:
+                                        index = 8;
+                                        break;
+                                    case 9:
+                                        index = 9;
+                                        break;
+                                    case 10:
+                                        index = 10;
+                                        break;
+                                    case 11:
+                                        index = 11;
+                                        break;
+                                    case 12:
+                                        index = 12;
+                                        break;
+                                    case 13:
+                                        index = 13;
+                                        break;
+                                    case 14:
+                                        index = 14;
+                                        break;
+                                    case 15:
+                                        index = 15;
+                                        break;
+                                    case 16:
+                                        index = 16;
+                                        break;
+                                    case 17:
+                                        index = 17;
+                                        break;
+                                    case 18:
+                                        index = 18;
+                                        break;
+                                    case 19:
+                                        index = 19;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                cardClicked(index)
+                            }
+                            return (
+                                <div key={outerIndex}>
+                                    <button onClick={handleClick}>
+                                        <img
+                                            className="players-card"
+                                            src={`./cards/${playerImages[outerIndex]}${card < 10 ? '0' : ''}${card}.png`}
+                                            alt={`card${outerIndex}`}
+                                        />
+                                    </button>
+                                </div>
+                            );
+                        })}
+                        <h1 className="war-title">Choose cards to Meld/Run</h1>
+                        <button onClick={remove1}>
+                            <img src={`./cards/${meld1Image}.png`} alt="first meld card"/>
+                        </button>
+                        <button onClick={remove2}>
+                            <img src={`./cards/${meld2Image}.png`} alt="second meld card"/>
+                        </button>
+                        <button onClick={remove3}>
+                            <img src={`./cards/${meld3Image}.png`} alt="third meld card"/>
+                        </button>
+                        </div>
+                        <div className="players-cards">
+                            {dealerCards.map((card, outerIndex) => (
+                                <div key={outerIndex}>
+                                <img
+                                    key={outerIndex} className="players-card"
+                                    src={`./cards/back.png`} alt={`card${outerIndex}`}
+                                />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="stock-container">
+                        <button>
+                            <img className="players-card" src="./cards/back.png" alt="stockblank"/>
+                        </button>
+                        <button>
+                            <img className="players-card" src={`./cards/${stockImage}.png`} alt="stockcard"/>
+                        </button>
                     </div>
                 </>
                 }
