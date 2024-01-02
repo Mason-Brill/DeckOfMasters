@@ -10,6 +10,10 @@ export default function Rummy() {
     const [switcher, changeSwitcher] = useState(false)
     const [numRounds, changenumRounds] = useState(0)
     const [starter, changeStarter] = useState("")
+    const [layoffOrMeld, changelayoffOrMeld] = useState(true)
+    const [melding, changeMeld] = useState(false)
+    const [layoff, changeLayoff] = useState(false)
+    const [canMeld, changecanMeld] = useState(true)
 
     //cards used when determing who draws first
     const [card1, changeCard1] = useState("back")
@@ -209,6 +213,8 @@ export default function Rummy() {
     }
 
     function cardClicked(index){
+
+        // add if statements here to check if meld is true or layoff is true
         if((index !== meld1Index) && (index !== meld2Index) && (index !== meld3Index)){
             if(meld1Value === 0){
                     changemeld1Index(index)
@@ -243,6 +249,16 @@ export default function Rummy() {
         }
     }
 
+    function wantsLayoff() {
+        changelayoffOrMeld(false)
+        changeLayoff(true)
+    }
+
+    function wantsMeld() {
+        changelayoffOrMeld(false)
+        changeMeld(true)
+    }
+
     function remove1() {
         changemeld1Value(0)
         changemeld1Index(null)
@@ -262,7 +278,7 @@ export default function Rummy() {
     }
 
     function meld() {
-        if(meld1Value === meld2Value && meld1Value === meld3Value && meld1Image != "back"){
+        if(meld1Value === meld2Value && meld1Value === meld3Value && meld1Image !== "back"){
             //creating buffer array and copying values from 'meldCards'
             const bufferMeldCards = meldCards.map(row => [...row]);
             //creating row to add to meldCards
@@ -284,55 +300,75 @@ export default function Rummy() {
             const bufferPlayerCard = playerCards
             const bufferPlayerImages = playerImages
 
-            bufferPlayerCard.splice(meld1Image,1)
+            bufferPlayerCard.splice(meld1Index,1)
             bufferPlayerImages.splice(meld1Index,1)
-            bufferPlayerCard.splice(meld2Image,1)
+            bufferPlayerCard.splice(meld2Index,1)
             bufferPlayerImages.splice(meld2Index,1)
-            bufferPlayerCard.splice(meld3Image,1)
+            bufferPlayerCard.splice(meld3Index,1)
             bufferPlayerImages.splice(meld3Index,1)
+
+            changePlayerCards(bufferPlayerCard)
+            changePlayerImages(bufferPlayerImages)
 
             //resetting values
             remove1()
             remove2()
             remove3()
         }
+        changelayoffOrMeld(true)
+        changeMeld(false)
+        changecanMeld(false)
     }
 
     function run() {
         if(meld1Value === (meld2Value - 1) && meld1Value === (meld3Value - 2)){
-            //creating buffer array and copying values from 'meldCards'
-            const bufferRunCards = runCards.map(row => [...row]);
-            //creating row to add to meldCards
-            const newRunHand = [meld1Value,meld2Value,meld3Value]
-            //adding new set of meld cards to bufferArray
-            bufferRunCards.push(newRunHand)
-            //changing meldCards
-            changerunCards(bufferRunCards)
+            if((playerImages[meld1Index] === playerImages[meld2Index]) && (playerImages[meld2Index] === playerImages[meld3Index])){
+                //creating buffer array and copying values from 'meldCards'
+                const bufferRunCards = runCards.map(row => [...row]);
+                //creating row to add to meldCards
+                const newRunHand = [meld1Value,meld2Value,meld3Value]
+                //adding new set of meld cards to bufferArray
+                bufferRunCards.push(newRunHand)
+                //changing meldCards
+                changerunCards(bufferRunCards)
 
-            //creating buffer array and copying values from 'meldCards'
-            const bufferRunImages = runImages.map(row => [...row]);
-            //creating row to add to meldCards
-            const newRunImages = [meld1Image,meld2Image,meld3Image]
-            //adding new set of meld cards to bufferArray
-            bufferRunImages.push(newRunImages)
-            //changing meldCards
-            changerunImages(bufferRunImages)
+                //creating buffer array and copying values from 'meldCards'
+                const bufferRunImages = runImages.map(row => [...row]);
+                //creating row to add to meldCards
+                const newRunImages = [meld1Image,meld2Image,meld3Image]
+                //adding new set of meld cards to bufferArray
+                bufferRunImages.push(newRunImages)
+                //changing meldCards
+                changerunImages(bufferRunImages)
 
-            const bufferPlayerCard = playerCards
-            const bufferPlayerImages = playerImages
+                const bufferPlayerCard = playerCards
+                const bufferPlayerImages = playerImages
 
-            bufferPlayerCard.splice(meld1Image,1)
-            bufferPlayerImages.splice(meld1Index,1)
-            bufferPlayerCard.splice(meld2Image,1)
-            bufferPlayerImages.splice(meld2Index,1)
-            bufferPlayerCard.splice(meld3Image,1)
-            bufferPlayerImages.splice(meld3Index,1)
+                bufferPlayerCard.splice(meld1Index,1)
+                bufferPlayerImages.splice(meld1Index,1)
+                bufferPlayerCard.splice(meld2Index,1)
+                bufferPlayerImages.splice(meld2Index,1)
+                bufferPlayerCard.splice(meld3Index,1)
+                bufferPlayerImages.splice(meld3Index,1)
 
-            //resetting values
-            remove1()
-            remove2()
-            remove3()
+                changePlayerCards(bufferPlayerCard)
+                changePlayerImages(bufferPlayerImages)
+
+                //resetting values
+                remove1()
+                remove2()
+                remove3()
+            }
         }
+        changelayoffOrMeld(true)
+        changeMeld(false)
+        changecanMeld(false)
+    }
+
+    function goBack() {
+        changelayoffOrMeld(true)
+        changeMeld(false)
+        changeLayoff(false)
     }
     return (
         <>
@@ -417,8 +453,8 @@ export default function Rummy() {
                     </div>
 
                     <div className="options-container">
-                        <div>
-                            <h1 className="draw-card">Pick a card to draw</h1>
+                        <div className="stock-title-container">
+                            <h1 className="stocker">Stock</h1>
                             <div className="stock-container">
                                 <button onClick={hiddenClicked}>
                                     <img className="players-card" src="./cards/back.png" alt="stockblank"/>
@@ -426,6 +462,7 @@ export default function Rummy() {
                                 <button onClick={stockClciked}>
                                     <img className="players-card" src={`./cards/${stockImage}.png`} alt="stockcard"/>
                                 </button>
+                                <h1 className="draw-card">Pick a card to draw</h1>
                             </div>
                         </div>
                     </div>
@@ -524,13 +561,6 @@ export default function Rummy() {
                                 </div>
                             );
                         })}
-                            {/* 
-                            add button that calls a function that changes 'second' to false
-                            and 'third' to true, and takes the value of each
-                            'meld#Value/meld#Image' and creates a new HTML element with the
-                            melded cards in it and remove these cards from the users hand
-                            
-                        */}
                         </div>
                         <div className="player2-cards">
                             {dealerCards.map((card, outerIndex) => (
@@ -544,14 +574,27 @@ export default function Rummy() {
                         </div>
                     </div>
                     <div className="options-container">
-                        <div className="stock-container">
-                            <button>
-                                <img className="players-card" src="./cards/back.png" alt="stockblank"/>
-                            </button>
-                            <button>
-                                <img className="players-card" src={`./cards/${stockImage}.png`} alt="stockcard"/>
-                            </button>
+                        <div className="stock-title-container">
+                            <h1 className="stocker">Stock</h1>
+                            <div className="stock-container">
+                                <button>
+                                    <img className="players-card" src="./cards/back.png" alt="stockblank"/>
+                                </button>
+                                <button>
+                                    <img className="players-card" src={`./cards/${stockImage}.png`} alt="stockcard"/>
+                                </button>
+                            </div>
                         </div>
+                        {layoffOrMeld &&
+                        <>
+                        <button className="play-btn" onClick={wantsLayoff}>Layoff?</button>
+                        {canMeld &&
+                            <button className="play-btn" onClick={wantsMeld}>Meld/Run?</button>
+                        }
+                        </>
+                        }
+                        {melding &&
+                        <>
                             <div>
                                 <h1 className="meld-title">Choose cards to Meld/Run</h1>
                                 <h1 className="meld-title">place cards in increasing order</h1>
@@ -573,6 +616,15 @@ export default function Rummy() {
                             <button className="play-btn" onClick={run}>
                                 Run?
                             </button>
+                            <button className="play-btn" onClick={goBack}>Back?</button>
+                        </>
+                        }
+                        {layoff &&
+                        <>
+                            <h1 className="rum-text">Choose a card to layoff</h1>
+                            <button className="play-btn" onClick={goBack}>Back?</button>
+                        </>
+                        }
                     </div>
                     <div className="meld-run-container">
                         <div className="mr-cards">

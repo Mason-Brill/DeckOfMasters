@@ -301,7 +301,16 @@ button {
   font-size: 36pt;
   color: goldenrod;
   animation: highlight 1.5s linear infinite;
+}
 
+.stock-title-conatiner {
+  display: flex;
+  flex-direction: column;
+}
+
+.stocker {
+  font-size: 36pt;
+  color: goldenrod;
 }
 
 .meld-title {
