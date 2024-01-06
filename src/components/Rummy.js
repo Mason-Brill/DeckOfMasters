@@ -14,6 +14,8 @@ export default function Rummy() {
     const [melding, changeMeld] = useState(false)
     const [layoff, changeLayoff] = useState(false)
     const [canMeld, changecanMeld] = useState(true)
+    const [isLaying, changeisLaying] = useState(true)
+    const [layoffIndex, changelayoffIndex] = useState(0)
 
     //cards used when determing who draws first
     const [card1, changeCard1] = useState("back")
@@ -36,6 +38,8 @@ export default function Rummy() {
     const [hiddenCard, changehiddenCard] = useState(0)
     const [hiddenImage, changehiddenImage] = useState("")
 
+    const [layoffCard, changelayoffCard] = useState(0)
+    const [layoffImage, changelayoffImage] = useState("back")
     //might need this...
     //const [playersIndex, changeplayersIndex] = useState(0)
 
@@ -214,44 +218,63 @@ export default function Rummy() {
 
     function cardClicked(index){
 
-        // add if statements here to check if meld is true or layoff is true
-        if((index !== meld1Index) && (index !== meld2Index) && (index !== meld3Index)){
-            if(meld1Value === 0){
-                    changemeld1Index(index)
-                    changemeld1Value(playerCards[index])
+        if(melding === true) {
+            // add if statements here to check if meld is true or layoff is true
+            if((index !== meld1Index) && (index !== meld2Index) && (index !== meld3Index)){
+                if(meld1Value === 0){
+                        changemeld1Index(index)
+                        changemeld1Value(playerCards[index])
+                        if(playerCards[index]<10){
+                            changemeld1Image(`${playerImages[index]}0${playerCards[index]}`)
+                        }
+                        else{
+                            changemeld1Image(`${playerImages[index]}${playerCards[index]}`)
+                        }
+                }
+                else if(meld2Value === 0){
+                    changemeld2Index(index)
+                    changemeld2Value(playerCards[index])
                     if(playerCards[index]<10){
-                        changemeld1Image(`${playerImages[index]}0${playerCards[index]}`)
+                        changemeld2Image(`${playerImages[index]}0${playerCards[index]}`)
                     }
                     else{
-                        changemeld1Image(`${playerImages[index]}${playerCards[index]}`)
+                        changemeld2Image(`${playerImages[index]}${playerCards[index]}`)
                     }
-            }
-            else if(meld2Value === 0){
-                changemeld2Index(index)
-                changemeld2Value(playerCards[index])
-                if(playerCards[index]<10){
-                    changemeld2Image(`${playerImages[index]}0${playerCards[index]}`)
                 }
-                else{
-                    changemeld2Image(`${playerImages[index]}${playerCards[index]}`)
-                }
-            }
-            else if(meld3Value === 0){
-                changemeld3Index(index)
-                changemeld3Value(playerCards[index])
-                if(playerCards[index]<10){
-                    changemeld3Image(`${playerImages[index]}0${playerCards[index]}`)
-                }
-                else{
-                    changemeld3Image(`${playerImages[index]}${playerCards[index]}`)
+                else if(meld3Value === 0){
+                    changemeld3Index(index)
+                    changemeld3Value(playerCards[index])
+                    if(playerCards[index]<10){
+                        changemeld3Image(`${playerImages[index]}0${playerCards[index]}`)
+                    }
+                    else{
+                        changemeld3Image(`${playerImages[index]}${playerCards[index]}`)
+                    }
                 }
             }
+        }
+        if(layoff === true) {
+            changelayoffCard(playerCards[index])
+            if(playerCards[index]<10){
+                changelayoffImage(`${playerImages[index]}0${playerCards[index]}`)
+            }
+            else{
+                changelayoffImage(`${playerImages[index]}${playerCards[index]}`)
+            }
+
+            changelayoffIndex(index)
         }
     }
 
     function wantsLayoff() {
         changelayoffOrMeld(false)
         changeLayoff(true)
+
+        //used for testing layoff feature
+        // const bufferCardss = [5,5,5,5,5,5,5]//////////////////////////////////////////////////////////////
+        // changePlayerCards(bufferCardss)//////////////////////////////////////////////////////////////
+        // const bufferImagess = [4,4,4,4,4,4,4]   //////////////////////////////////////////////////////////////
+        // changePlayerImages(bufferImagess)//////////////////////////////////////////////////////////////
     }
 
     function wantsMeld() {
@@ -370,6 +393,41 @@ export default function Rummy() {
         changeMeld(false)
         changeLayoff(false)
     }
+
+    function endTurn() {
+        changeThird(true)
+        changeSecond(false)
+        changeMeld(false)
+        changeLayoff(false)
+        changecanMeld(true)
+    }
+
+    function layoffClicked(index){
+        if(meldCards[index][0] === layoffCard){
+            const meldBuffer = meldCards.map(row => [...row]);
+            const meldImagesBuffer = meldImages.map(row => [...row]);
+
+            // find method to append a value to the 2nd dimension of a 2D array
+            // do this on meldBuffer
+
+            meldBuffer[index].push(layoffCard)
+            changemeldCards(meldBuffer)
+
+            meldImagesBuffer[index].push(layoffImage)
+            changemeldImages(meldImagesBuffer)
+
+            const bufferCard = playerCards
+            const bufferImages = playerImages
+
+            bufferCard.splice(layoffIndex,1)
+            bufferImages.splice(layoffIndex,1)
+
+            changelayoffCard(0)
+            changelayoffImage("back")
+
+        }
+    }
+
     return (
         <>
             {rounds ? (
@@ -588,9 +646,10 @@ export default function Rummy() {
                         {layoffOrMeld &&
                         <>
                         <button className="play-btn" onClick={wantsLayoff}>Layoff?</button>
-                        {canMeld &&
-                            <button className="play-btn" onClick={wantsMeld}>Meld/Run?</button>
-                        }
+                            {canMeld &&
+                                <button className="play-btn" onClick={wantsMeld}>Meld/Run?</button>
+                            }
+                        <button className="play-btn" onClick={endTurn}>End Turn?</button>
                         </>
                         }
                         {melding &&
@@ -621,7 +680,11 @@ export default function Rummy() {
                         }
                         {layoff &&
                         <>
-                            <h1 className="rum-text">Choose a card to layoff</h1>
+                            <div>
+                                <h1 className="meld-title">Choose a card to layoff</h1>
+                                <h1 className="meld-title">Then click a hand</h1>
+                            </div>
+                            <img className="players-card" src={`./cards/${layoffImage}.png`} alt="layoff card"/>
                             <button className="play-btn" onClick={goBack}>Back?</button>
                         </>
                         }
@@ -629,7 +692,85 @@ export default function Rummy() {
                     <div className="meld-run-container">
                         <div className="mr-cards">
                             <h1 className="war-title">Meld Hands:</h1>
-                            {meldImages.map((row, rowIndex) => (
+                            
+
+
+
+                            {meldImages.map((row, rowIndex) => {
+
+                                let index = 0
+
+                                const handleClick = () => {
+                                    //each card is assigned its own function when clicked so we know what card is clicked
+                                    switch (rowIndex) {
+                                        case 0:
+                                            index = 0;
+                                            break;
+                                        case 1:
+                                            index = 1;
+                                            break;
+                                        case 2:
+                                            index = 2;
+                                            break;
+                                        case 3:
+                                            index = 3;
+                                            break;
+                                        case 4:
+                                            index = 4;
+                                            break;
+                                        case 5:
+                                            index = 5;
+                                            break;
+                                        case 6:
+                                            index = 6;
+                                            break;
+                                        case 7:
+                                            index = 7;
+                                            break;
+                                        case 8:
+                                            index = 8;
+                                            break;
+                                        case 9:
+                                            index = 9;
+                                            break;
+                                        case 10:
+                                            index = 10;
+                                            break;
+                                        case 11:
+                                            index = 11;
+                                            break;
+                                        case 12:
+                                            index = 12;
+                                            break;
+                                        case 13:
+                                            index = 13;
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    layoffClicked(index)
+                                }
+                                return (
+                                    <div key={rowIndex}>
+                                        <button onClick={handleClick}>
+                                        <div key={rowIndex}>
+                                            {row.map((card, columnIndex) => (
+                                            <img
+                                                key={`${rowIndex}-${columnIndex}`}
+                                                className="players-card"
+                                                src={`./cards/${card}.png`}
+                                                alt={`card${rowIndex}-${columnIndex}`}
+                                            />
+                                            ))}
+                                        </div>
+                                        </button>
+                                    </div>
+                                );
+                                })}
+
+
+
+                            {/* {meldImages.map((row, rowIndex) => (
                                 <div key={rowIndex}>
                                     {row.map((card, columnIndex) => (
                                     <img
@@ -640,7 +781,7 @@ export default function Rummy() {
                                     />
                                     ))}
                                 </div>
-                            ))}
+                            ))} */}
                         </div>
                         <div className="mr-cards">
                             <h1 className="war-title">Run Hands:</h1>
