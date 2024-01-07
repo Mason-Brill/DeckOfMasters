@@ -35,8 +35,6 @@ export default function Rummy() {
     //cards used when player is determing which card to swap at start of players turn
     const [stockCard, changeStock] = useState(0)
     const [stockImage, changeStockImage] = useState("")
-    const [hiddenCard, changehiddenCard] = useState(0)
-    const [hiddenImage, changehiddenImage] = useState("")
 
     const [layoffCard, changelayoffCard] = useState(0)
     const [layoffImage, changelayoffImage] = useState("back")
@@ -271,10 +269,10 @@ export default function Rummy() {
         changeLayoff(true)
 
         //used for testing layoff feature
-        // const bufferCardss = [5,5,5,5,5,5,5]//////////////////////////////////////////////////////////////
-        // changePlayerCards(bufferCardss)//////////////////////////////////////////////////////////////
-        // const bufferImagess = [4,4,4,4,4,4,4]   //////////////////////////////////////////////////////////////
-        // changePlayerImages(bufferImagess)//////////////////////////////////////////////////////////////
+        const bufferCardss = [5,6,7,8,9,10,11]//////////////////////////////////////////////////////////////
+        changePlayerCards(bufferCardss)//////////////////////////////////////////////////////////////
+        const bufferImagess = [4,4,4,3,4,4,4]   //////////////////////////////////////////////////////////////
+        changePlayerImages(bufferImagess)//////////////////////////////////////////////////////////////
     }
 
     function wantsMeld() {
@@ -394,14 +392,6 @@ export default function Rummy() {
         changeLayoff(false)
     }
 
-    function endTurn() {
-        changeThird(true)
-        changeSecond(false)
-        changeMeld(false)
-        changeLayoff(false)
-        changecanMeld(true)
-    }
-
     function layoffClicked(index){
         if(meldCards[index][0] === layoffCard){
             const meldBuffer = meldCards.map(row => [...row]);
@@ -426,6 +416,164 @@ export default function Rummy() {
             changelayoffImage("back")
 
         }
+    }
+
+    function runClicked(index){
+        const runCardsBuffer = runCards
+        const runImagesBuffer = runImages
+        const CardsBuffer = playerCards
+        const ImagesBuffer = playerImages
+
+        if(layoffImage[0] === runImages[index][0][0]){
+            if(runCards[index][0] === layoffCard+1){
+                runCardsBuffer[index].unshift(layoffCard)
+                runImagesBuffer[index].unshift(layoffImage)
+                changerunCards(runCardsBuffer)
+                changerunImages(runImagesBuffer)
+
+                CardsBuffer.splice(layoffIndex,1)
+                ImagesBuffer.splice(layoffIndex,1)
+                changePlayerCards(CardsBuffer)
+                changePlayerImages(ImagesBuffer)
+
+                changelayoffCard(0)
+                changelayoffImage("back")
+            }
+            else if((runCards[index][runCards[index].length-1]) === layoffCard-1){
+                runCardsBuffer[index].push(layoffCard)
+                runImagesBuffer[index].push(layoffImage)
+                changerunCards(runCardsBuffer)
+                changerunImages(runImagesBuffer)
+
+                CardsBuffer.splice(layoffIndex,1)
+                ImagesBuffer.splice(layoffIndex,1)
+                changePlayerCards(CardsBuffer)
+                changePlayerImages(ImagesBuffer)
+
+                changelayoffCard(0)
+                changelayoffImage("back")
+            }
+        }
+    }
+
+    function endTurn() {
+        changeThird(true)
+        changeSecond(false)
+        changeMeld(false)
+        changeLayoff(false)
+        changecanMeld(true)
+    }
+
+    function dealersTurn(){
+
+        //dealer needs to draw from either the stock pile or discard pile
+        //do this with random number generator
+        let random1 = getRandomNumber(1,2)
+        let hiddenCard = getRandomNumber(1,13)
+        const DealersCardsBuffer = dealerCards
+
+        if(random1 === 1){
+            DealersCardsBuffer.push(stockCard)
+
+            //changing stock card and image
+            changeStock(hiddenCard)
+
+            if(hiddenCard < 10){
+                changeStockImage(`${getRandomNumber(1,4)}0${hiddenCard}`)
+            }
+            else{
+                changeStockImage(`${getRandomNumber(1,4)}${hiddenCard}`)
+            }
+        }
+        else if(random1 === 2){
+            DealersCardsBuffer.push(hiddenCard)
+        }
+
+        //melding
+        // this will be a for loop nested within a for loop that will check each card
+        // against all others and if the card on the outside loop is the same as the card on the inside loop
+        // we will append it to a meldHand variable that will contain the three cards to be added
+        // to the hands of meld cards
+        //
+        // if there are three cards in the meldHand, we will remove those cards from the dealers cards
+        // and add a new meld hand to melded cards
+
+        //running
+
+        let meldCardsBuffer = meldCards
+        let meldImagesBuffer = meldImages
+
+        let runCardsBuffer = runCards
+        let runImagesBuffer = runImages
+
+        //laying off
+        for(let i=0;i<DealersCardsBuffer.length;i++){
+            let curDealerCardSuit = getRandomNumber(1,4)
+            console.log(`current card: ${DealersCardsBuffer[i]}`)
+            console.log(`current suit: ${curDealerCardSuit}`)
+            // compare each value of dealerscard to each value at the first index of each meld hand
+            // if the same, remove from dealers cards, add to meld hand
+
+            // compare each dealers card to the first and last card of each running hand
+            // if one less or one greater than, add this card to the running hand
+            for(let j=0;j<meldCardsBuffer.length;j++){
+                //checking if card currently selected in dealers cards is equal to a card in the current meld hand
+                if(DealersCardsBuffer[i] === meldCardsBuffer[j][0]){
+                    meldCardsBuffer[j].push(DealersCardsBuffer[i])
+                    if(DealersCardsBuffer[i] < 10){
+                        meldImagesBuffer[j].push(`${getRandomNumber(1,4)}0${DealersCardsBuffer[i]}`)
+                    }
+                    else{
+                        meldImagesBuffer[j].push(`${getRandomNumber(1,4)}${DealersCardsBuffer[i]}`)
+                    }
+
+                    //removing card from dealers hand
+                    DealersCardsBuffer.splice(i,1)
+                }
+            }
+
+            //add another for loop right here to go through and check all run hands
+            for(let j=0;j<runCardsBuffer.length;j++){
+                if(DealersCardsBuffer[i] === runCardsBuffer[j][0]-1){
+                    //making sure suit is the same
+                    if(parseInt(curDealerCardSuit) === parseInt(runImagesBuffer[j][0][0])){
+                        runCardsBuffer[j].unshift(DealersCardsBuffer[i])
+
+                        if(DealersCardsBuffer[i] < 10){
+                            runImagesBuffer[j].unshift(`${curDealerCardSuit}0${DealersCardsBuffer[i]}`)
+                        }
+                        else{
+                            runImagesBuffer[j].unshift(`${curDealerCardSuit}${DealersCardsBuffer[i]}`)
+                        }
+
+                        //removing card from dealers hand
+                        DealersCardsBuffer.splice(i,1)
+                    }
+                }
+                else if(DealersCardsBuffer[i] === runCardsBuffer[j][runCardsBuffer[j].length-1]+1){
+                    //making sure suit is the same
+                    if(parseInt(curDealerCardSuit) === parseInt(runImagesBuffer[j][0][0])){
+                        runCardsBuffer[j].push(DealersCardsBuffer[i])
+
+                        if(DealersCardsBuffer[i] < 10){
+                            runImagesBuffer[j].push(`${curDealerCardSuit}0${DealersCardsBuffer[i]}`)
+                        }
+                        else{
+                            runImagesBuffer[j].push(`${curDealerCardSuit}${DealersCardsBuffer[i]}`)
+                        }
+
+                        //removing card from dealers hand
+                        DealersCardsBuffer.splice(i,1)
+                    }
+                }
+            }
+        }
+
+        changeDealerCards(DealersCardsBuffer)
+        changemeldCards(meldCardsBuffer)
+        changemeldImages(meldImagesBuffer)
+        changeThird(false)
+        changeFirst(true)
     }
 
     return (
@@ -484,7 +632,7 @@ export default function Rummy() {
                     </div>
                     <div className="game-container">
                         <div className="players-cards">
-                        {playerCards.slice(0, 10).map((card, outerIndex) => {
+                        {playerCards.map((card, outerIndex) => {
                             return (
                                 <div key={outerIndex}>
                                     <button>
@@ -499,14 +647,16 @@ export default function Rummy() {
                         })}
                         </div>
                         <div className="player2-cards">
-                            {dealerCards.slice(0, 10).map((card, outerIndex) => (
-                                <div key={outerIndex}>
-                                <img
-                                    key={outerIndex} className="players-card"
-                                    src={`./cards/back.png`} alt={`card${outerIndex}`}
-                                />
-                                </div>
-                            ))}
+                            {dealerCards.map((card, outerIndex) => {
+                                return(
+                                    <div key={outerIndex}>
+                                    <img
+                                        key={outerIndex} className="players-card"
+                                        src={`./cards/back.png`} alt={`card${outerIndex}`}
+                                    />
+                                    </div>
+                                )
+                            })}
                         </div>
                     </div>
 
@@ -522,6 +672,160 @@ export default function Rummy() {
                                 </button>
                                 <h1 className="draw-card">Pick a card to draw</h1>
                             </div>
+                        </div>
+                    </div>
+                    <div className="meld-run-container">
+                        <div className="mr-cards">
+                            <h1 className="war-title">Meld Hands:</h1>
+                            
+
+
+
+                            {meldImages.map((row, rowIndex) => {
+
+                                let index = 0
+
+                                const handleClick = () => {
+                                    //each card is assigned its own function when clicked so we know what card is clicked
+                                    switch (rowIndex) {
+                                        case 0:
+                                            index = 0;
+                                            break;
+                                        case 1:
+                                            index = 1;
+                                            break;
+                                        case 2:
+                                            index = 2;
+                                            break;
+                                        case 3:
+                                            index = 3;
+                                            break;
+                                        case 4:
+                                            index = 4;
+                                            break;
+                                        case 5:
+                                            index = 5;
+                                            break;
+                                        case 6:
+                                            index = 6;
+                                            break;
+                                        case 7:
+                                            index = 7;
+                                            break;
+                                        case 8:
+                                            index = 8;
+                                            break;
+                                        case 9:
+                                            index = 9;
+                                            break;
+                                        case 10:
+                                            index = 10;
+                                            break;
+                                        case 11:
+                                            index = 11;
+                                            break;
+                                        case 12:
+                                            index = 12;
+                                            break;
+                                        case 13:
+                                            index = 13;
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    layoffClicked(index)
+                                }
+                                return (
+                                    <div key={rowIndex}>
+                                        <button onClick={handleClick}>
+                                        <div key={rowIndex}>
+                                            {row.map((card, columnIndex) => (
+                                            <img
+                                                key={`${rowIndex}-${columnIndex}`}
+                                                className="players-card"
+                                                src={`./cards/${card}.png`}
+                                                alt={`card${rowIndex}-${columnIndex}`}
+                                            />
+                                            ))}
+                                        </div>
+                                        </button>
+                                    </div>
+                                );
+                                })}
+                        </div>
+                        <div className="mr-cards">
+                            <h1 className="war-title">Run Hands:</h1>
+                            {runImages.map((row, rowIndex) => {
+
+                            let index = 0
+
+                            const handleClick = () => {
+                                //each card is assigned its own function when clicked so we know what card is clicked
+                                switch (rowIndex) {
+                                    case 0:
+                                        index = 0;
+                                        break;
+                                    case 1:
+                                        index = 1;
+                                        break;
+                                    case 2:
+                                        index = 2;
+                                        break;
+                                    case 3:
+                                        index = 3;
+                                        break;
+                                    case 4:
+                                        index = 4;
+                                        break;
+                                    case 5:
+                                        index = 5;
+                                        break;
+                                    case 6:
+                                        index = 6;
+                                        break;
+                                    case 7:
+                                        index = 7;
+                                        break;
+                                    case 8:
+                                        index = 8;
+                                        break;
+                                    case 9:
+                                        index = 9;
+                                        break;
+                                    case 10:
+                                        index = 10;
+                                        break;
+                                    case 11:
+                                        index = 11;
+                                        break;
+                                    case 12:
+                                        index = 12;
+                                        break;
+                                    case 13:
+                                        index = 13;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                runClicked(index)
+                            }
+                            return (
+                                <div key={rowIndex}>
+                                    <button onClick={handleClick}>
+                                        <div key={rowIndex}>
+                                            {row.map((card, columnIndex) => (
+                                            <img
+                                                key={`${rowIndex}-${columnIndex}`}
+                                                className="players-card"
+                                                src={`./cards/${card}.png`}
+                                                alt={`card${rowIndex}-${columnIndex}`}
+                                            />
+                                            ))}
+                                        </div>
+                                    </button>
+                                </div>
+                            );
+                            })}
                         </div>
                     </div>
                 </>
@@ -767,44 +1071,87 @@ export default function Rummy() {
                                     </div>
                                 );
                                 })}
-
-
-
-                            {/* {meldImages.map((row, rowIndex) => (
-                                <div key={rowIndex}>
-                                    {row.map((card, columnIndex) => (
-                                    <img
-                                        key={`${rowIndex}-${columnIndex}`}
-                                        className="players-card"
-                                        src={`./cards/${card}.png`}
-                                        alt={`card${rowIndex}-${columnIndex}`}
-                                    />
-                                    ))}
-                                </div>
-                            ))} */}
                         </div>
                         <div className="mr-cards">
                             <h1 className="war-title">Run Hands:</h1>
-                            {runImages.map((row, rowIndex) => (
+                            {runImages.map((row, rowIndex) => {
+
+                            let index = 0
+
+                            const handleClick = () => {
+                                //each card is assigned its own function when clicked so we know what card is clicked
+                                switch (rowIndex) {
+                                    case 0:
+                                        index = 0;
+                                        break;
+                                    case 1:
+                                        index = 1;
+                                        break;
+                                    case 2:
+                                        index = 2;
+                                        break;
+                                    case 3:
+                                        index = 3;
+                                        break;
+                                    case 4:
+                                        index = 4;
+                                        break;
+                                    case 5:
+                                        index = 5;
+                                        break;
+                                    case 6:
+                                        index = 6;
+                                        break;
+                                    case 7:
+                                        index = 7;
+                                        break;
+                                    case 8:
+                                        index = 8;
+                                        break;
+                                    case 9:
+                                        index = 9;
+                                        break;
+                                    case 10:
+                                        index = 10;
+                                        break;
+                                    case 11:
+                                        index = 11;
+                                        break;
+                                    case 12:
+                                        index = 12;
+                                        break;
+                                    case 13:
+                                        index = 13;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                runClicked(index)
+                            }
+                            return (
                                 <div key={rowIndex}>
-                                    {row.map((card, columnIndex) => (
-                                    <img
-                                        key={`${rowIndex}-${columnIndex}`}
-                                        className="players-card"
-                                        src={`./cards/${card}.png`}
-                                        alt={`card${rowIndex}-${columnIndex}`}
-                                    />
-                                    ))}
+                                    <button onClick={handleClick}>
+                                        <div key={rowIndex}>
+                                            {row.map((card, columnIndex) => (
+                                            <img
+                                                key={`${rowIndex}-${columnIndex}`}
+                                                className="players-card"
+                                                src={`./cards/${card}.png`}
+                                                alt={`card${rowIndex}-${columnIndex}`}
+                                            />
+                                            ))}
+                                        </div>
+                                    </button>
                                 </div>
-                            ))}
+                            );
+                            })}
                         </div>
                     </div>
                 </>
                 }
                 {third &&
-                <>
-
-                </>
+            
+                    dealersTurn()
                 }
             </>
             )}
