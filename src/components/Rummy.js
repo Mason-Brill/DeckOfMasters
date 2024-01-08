@@ -14,7 +14,6 @@ export default function Rummy() {
     const [melding, changeMeld] = useState(false)
     const [layoff, changeLayoff] = useState(false)
     const [canMeld, changecanMeld] = useState(true)
-    const [isLaying, changeisLaying] = useState(true)
     const [layoffIndex, changelayoffIndex] = useState(0)
 
     //cards used when determing who draws first
@@ -269,10 +268,10 @@ export default function Rummy() {
         changeLayoff(true)
 
         //used for testing layoff feature
-        const bufferCardss = [5,6,7,8,9,10,11]//////////////////////////////////////////////////////////////
-        changePlayerCards(bufferCardss)//////////////////////////////////////////////////////////////
-        const bufferImagess = [4,4,4,3,4,4,4]   //////////////////////////////////////////////////////////////
-        changePlayerImages(bufferImagess)//////////////////////////////////////////////////////////////
+        // const bufferCardss = [5,6,7,8,9,10,11]//////////////////////////////////////////////////////////////
+        // changePlayerCards(bufferCardss)//////////////////////////////////////////////////////////////
+        // const bufferImagess = [4,4,4,3,4,4,4]   //////////////////////////////////////////////////////////////
+        // changePlayerImages(bufferImagess)//////////////////////////////////////////////////////////////
     }
 
     function wantsMeld() {
@@ -500,22 +499,97 @@ export default function Rummy() {
 
         //running
 
-        let meldCardsBuffer = meldCards
-        let meldImagesBuffer = meldImages
+        let meldCardsBuffer = meldCards.map(row => [...row])
+        let meldImagesBuffer = meldImages.map(row => [...row])
 
         let runCardsBuffer = runCards
         let runImagesBuffer = runImages
 
+        let hasMeld = false
+        let counter = 1
+        let value1 = 0
+        let value2 = 0
+        let value3 = 0
+        let index1 = 0
+        let index2 = 0
+        let index3 = 0
+        let image1 = ""
+        let image2 = ""
+        let image3 = ""
+
+        //runing
+
+        //melding
+        for(let i=0;i<DealersCardsBuffer.length;i++){
+            if(hasMeld === false){
+                value1 = DealersCardsBuffer[i]
+                index1 = i
+                value2 = 0
+                value3 = 0
+                index2 = 0
+                index3 = 0
+                counter = 1
+                for(let j=0;j<DealersCardsBuffer.length;j++){
+                    if((i!==j)&&(hasMeld === false)){
+                        if(DealersCardsBuffer[i] === DealersCardsBuffer[j]){
+                            if(counter === 1){
+                                value2 = DealersCardsBuffer[j]
+                                index2 = j
+                                counter++
+                            }
+                            else if(counter === 2){
+                                value3 = DealersCardsBuffer[j]
+                                index3 = j
+                                counter++
+                                hasMeld = true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        //adding dealers meld card and images to card and iomage buffers
+        if(hasMeld === true &&((value1 === value2) && (value1 === value3))){
+
+            const DealersMeld = [value1, value2, value3]
+
+                meldCardsBuffer.push(DealersMeld)
+
+                if(value1 < 10){
+                    image1 = `${getRandomNumber(1,4)}0${value1}`
+                }
+                else{
+                    image1 = (`${getRandomNumber(1,4)}${value2}`)
+                }
+
+                if(value2 < 10){
+                    image2 = `${getRandomNumber(1,4)}0${value2}`
+                }
+                else{
+                    image2 = (`${getRandomNumber(1,4)}${value2}`)
+                }
+
+                if(value3 < 10){
+                    image3 = `${getRandomNumber(1,4)}0${value3}`
+                }
+                else{
+                    image3 = (`${getRandomNumber(1,4)}${value2}`)
+                }
+
+                meldImagesBuffer.push([image1, image2, image3])
+
+                DealersCardsBuffer.splice(index3,1)
+                DealersCardsBuffer.splice(index2,1)
+                DealersCardsBuffer.splice(index1,1)
+        }
+
         //laying off
         for(let i=0;i<DealersCardsBuffer.length;i++){
             let curDealerCardSuit = getRandomNumber(1,4)
-            console.log(`current card: ${DealersCardsBuffer[i]}`)
-            console.log(`current suit: ${curDealerCardSuit}`)
             // compare each value of dealerscard to each value at the first index of each meld hand
             // if the same, remove from dealers cards, add to meld hand
-
-            // compare each dealers card to the first and last card of each running hand
-            // if one less or one greater than, add this card to the running hand
+            //dealers laying off to meld hands
             for(let j=0;j<meldCardsBuffer.length;j++){
                 //checking if card currently selected in dealers cards is equal to a card in the current meld hand
                 if(DealersCardsBuffer[i] === meldCardsBuffer[j][0]){
@@ -532,7 +606,7 @@ export default function Rummy() {
                 }
             }
 
-            //add another for loop right here to go through and check all run hands
+            //dealers laying off to run hands
             for(let j=0;j<runCardsBuffer.length;j++){
                 if(DealersCardsBuffer[i] === runCardsBuffer[j][0]-1){
                     //making sure suit is the same
@@ -626,7 +700,7 @@ export default function Rummy() {
                 {first &&
                 <>
                     <h1 className="war-title">Rummy</h1>
-                    <div className="game-container">
+                    <div className="title-container">
                         <h2 className="war-title">Your Cards:</h2>
                         <h2 className="war-title">Dealers Cards:</h2>
                     </div>
@@ -678,9 +752,6 @@ export default function Rummy() {
                         <div className="mr-cards">
                             <h1 className="war-title">Meld Hands:</h1>
                             
-
-
-
                             {meldImages.map((row, rowIndex) => {
 
                                 let index = 0

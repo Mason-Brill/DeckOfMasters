@@ -234,6 +234,20 @@ button {
   display: flex;
   gap: 10vw;
   justify-content: center;
+  flex-wrap: wrap;
+}
+
+.player2-cards {
+  display: flex;
+  flex-wrap: wrap;
+  width: 40vw;
+}
+
+.title-container {
+  display: flex;
+  gap: 10vw;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .player-container {
@@ -267,12 +281,7 @@ button {
   display: flex;
   flex-wrap: wrap;
   width: 40vw;
-}
-.player2-cards {
-  display: flex;
-  flex-wrap: wrap;
-  width: 40vw;
-  height: 10vh;
+  gap: 0;
 }
 
 .players-card {
