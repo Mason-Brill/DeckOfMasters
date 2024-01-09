@@ -643,6 +643,25 @@ export default function Rummy() {
             }
         }
 
+        const randomCard = getRandomNumber(1,DealersCardsBuffer.length)
+
+        //discarding random dealer card
+        if(getRandomNumber(1,2) === 1){
+            DealersCardsBuffer.splice(randomCard,1)
+        }
+        else{
+            changeStock(DealersCardsBuffer[randomCard])
+            if(DealersCardsBuffer[randomCard]<10){
+                console.log(DealersCardsBuffer[randomCard])
+                changeStockImage(`${getRandomNumber(1,4)}0${DealersCardsBuffer[randomCard]}`)
+            }
+            else{
+                console.log(DealersCardsBuffer[randomCard])
+                changeStockImage(`${getRandomNumber(1,4)}${DealersCardsBuffer[randomCard]}`)
+            }
+            DealersCardsBuffer.splice(randomCard,1)
+        }
+
         changeDealerCards(DealersCardsBuffer)
         changemeldCards(meldCardsBuffer)
         changemeldImages(meldImagesBuffer)
