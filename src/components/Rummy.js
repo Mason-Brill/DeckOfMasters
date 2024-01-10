@@ -15,6 +15,10 @@ export default function Rummy() {
     const [layoff, changeLayoff] = useState(false)
     const [canMeld, changecanMeld] = useState(true)
     const [layoffIndex, changelayoffIndex] = useState(0)
+    const [endingTurn, changeendingTurn] = useState(false)
+    const [discardImage, changediscardImage] = useState("back")
+    const [discardValue, changediscardValue] = useState(0)
+    const [discardIndex, changediscardIndex] = useState(0)
 
     //cards used when determing who draws first
     const [card1, changeCard1] = useState("back")
@@ -189,28 +193,62 @@ export default function Rummy() {
         appendToPlayerImages(getRandomNumber(1,4))
 
         changeSecond(true)
+        changelayoffOrMeld(true)
         changeFirst(false)
     }
 
     function stockClciked() {
 
-        appendToPlayerCards(stockCard)
-        appendToPlayerImages(parseInt(stockImage.toString()[0], 10))
-        
-        const firstNum = getRandomNumber(1,13)
-        const secondNum = getRandomNumber(1,4)
+            appendToPlayerCards(stockCard)
+            appendToPlayerImages(parseInt(stockImage.toString()[0], 10))
+            
+            const firstNum = getRandomNumber(1,13)
+            const secondNum = getRandomNumber(1,4)
 
-        changeStock(firstNum)
+            changeStock(firstNum)
 
-        if(firstNum < 10){
-            changeStockImage(`${secondNum}0${firstNum}`)
+            if(firstNum < 10){
+                changeStockImage(`${secondNum}0${firstNum}`)
+            }
+            else{
+                changeStockImage(`${secondNum}${firstNum}`)
+            }
+
+            changeSecond(true)
+            changelayoffOrMeld(true)
+            changeFirst(false)
+    }
+
+    function discardEnding(){
+
+        if(discardImage !== "back"){
+            changeStock(discardValue)
+            changeStockImage(discardImage)
+            
+            playerCards.splice(discardIndex, 1)
+            playerImages.splice(discardIndex, 1)
+
+            changediscardImage("back")
+            changediscardValue(0)
+            changediscardIndex(0)
+            changeendingTurn(false)
+            changelayoffOrMeld(true)
+            endTurn()
         }
-        else{
-            changeStockImage(`${secondNum}${firstNum}`)
-        }
+    }
 
-        changeSecond(true)
-        changeFirst(false)
+    function stockEnding() {
+
+        if(discardImage !== "back"){
+            playerCards.splice(discardIndex, 1)
+            playerImages.splice(discardIndex, 1)
+            changediscardImage("back")
+            changediscardValue(0)
+            changediscardIndex(0)
+            changeendingTurn(false)
+            changelayoffOrMeld(true)
+            endTurn()
+        }
     }
 
     function cardClicked(index){
@@ -260,6 +298,16 @@ export default function Rummy() {
             }
 
             changelayoffIndex(index)
+        }
+        if(endingTurn === true){
+            changediscardValue(playerCards[index])
+            changediscardIndex(index)
+            if(playerCards[index]<10){
+                changediscardImage(`${playerImages[index]}0${playerCards[index]}`)
+            }
+            else{
+                changediscardImage(`${playerImages[index]}${playerCards[index]}`)
+            }
         }
     }
 
@@ -455,6 +503,11 @@ export default function Rummy() {
         }
     }
 
+    function discarding() {
+        changeendingTurn(true)
+        changelayoffOrMeld(false)
+    }
+
     function endTurn() {
         changeThird(true)
         changeSecond(false)
@@ -472,6 +525,7 @@ export default function Rummy() {
         const DealersCardsBuffer = dealerCards
 
         if(random1 === 1){
+            console.log("dealer choose discard card")
             DealersCardsBuffer.push(stockCard)
 
             //changing stock card and image
@@ -485,6 +539,7 @@ export default function Rummy() {
             }
         }
         else if(random1 === 2){
+            console.log("dealer choose hidden card")
             DealersCardsBuffer.push(hiddenCard)
         }
 
@@ -502,8 +557,89 @@ export default function Rummy() {
         let meldCardsBuffer = meldCards.map(row => [...row])
         let meldImagesBuffer = meldImages.map(row => [...row])
 
-        let runCardsBuffer = runCards
-        let runImagesBuffer = runImages
+        let runCardsBuffer = runCards.map(row => [...row])
+        let runImagesBuffer = runImages.map(row => [...row])
+
+        let valueMid = 0
+        let valueLeft = 0
+        let valueRight = 0
+        let imageMid = "back"
+        let imageLeft = "back"
+        let imageRight = "back"
+        let indexMid = 0
+        let indexLeft = 0
+        let indexRight = 0
+        let hasRun = false
+        let suit1 = 1
+        let suit2 = 2
+        let suit3 = 3
+
+        for(let i=0;i<dealerCards.length;i++){
+
+            if(hasRun === false){
+                valueMid = dealerCards[i]
+                indexMid = i
+                valueLeft = 0
+                valueRight = 0
+                suit1 = getRandomNumber(1,4)
+                suit2 = getRandomNumber(1,4)
+                suit3 = getRandomNumber(1,4)
+                for(let j=0;j<dealerCards.length;j++){
+                    //making sure we do not compare the same card as the outter loop with the inner loop
+                    if(i!==j){
+                        if(dealerCards[j] === valueMid-1){
+                            valueLeft = dealerCards[j]
+                            indexLeft = j
+                        }
+                        if(dealerCards[j] === valueMid+1){
+                            valueRight = dealerCards[j]
+                            indexRight = j
+                        }
+                        if((valueLeft !== 0)&&(valueRight !== 0)){
+                            if((suit1 === suit2)&&(suit2 === suit3)){
+                                hasRun = true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if(hasRun === true){
+            const DealersRun = [valueLeft, valueMid, valueRight]
+            console.log(DealersRun)
+
+            if(valueLeft<10){
+                imageLeft = `${suit1}0${valueLeft}`
+            }
+            else{
+                imageLeft = `${suit1}${valueLeft}`
+            }
+
+            if(valueMid<10){
+                imageMid = `${suit2}0${valueMid}`
+            }
+            else{
+                imageMid = `${suit2}${valueMid}`
+            }
+
+            if(valueRight<10){
+                imageRight = `${suit3}0${valueRight}`
+            }
+            else{
+                imageRight = `${suit3}${valueRight}`
+            }
+
+            const DealersRunImage = [imageLeft, imageMid, imageRight]
+
+            runCardsBuffer.push(DealersRun)
+            runImagesBuffer.push(DealersRunImage)
+
+            DealersCardsBuffer.splice(indexLeft,1)
+            DealersCardsBuffer.splice(indexMid,1)
+            DealersCardsBuffer.splice(indexRight,1)
+
+        }
 
         let hasMeld = false
         let counter = 1
@@ -519,6 +655,9 @@ export default function Rummy() {
 
         //runing
 
+        //need to add functionality so that user can discard a card at end of turn
+        //need to add functionality so that dealer can run if possible
+
         //melding
         for(let i=0;i<DealersCardsBuffer.length;i++){
             if(hasMeld === false){
@@ -530,7 +669,7 @@ export default function Rummy() {
                 index3 = 0
                 counter = 1
                 for(let j=0;j<DealersCardsBuffer.length;j++){
-                    if((i!==j)&&(hasMeld === false)){
+                    if((i!==j)&&(hasMeld === false)&&(hasRun === false)){
                         if(DealersCardsBuffer[i] === DealersCardsBuffer[j]){
                             if(counter === 1){
                                 value2 = DealersCardsBuffer[j]
@@ -643,7 +782,7 @@ export default function Rummy() {
             }
         }
 
-        const randomCard = getRandomNumber(1,DealersCardsBuffer.length)
+        const randomCard = getRandomNumber(0,DealersCardsBuffer.length-1)
 
         //discarding random dealer card
         if(getRandomNumber(1,2) === 1){
@@ -665,8 +804,11 @@ export default function Rummy() {
         changeDealerCards(DealersCardsBuffer)
         changemeldCards(meldCardsBuffer)
         changemeldImages(meldImagesBuffer)
+        changerunCards(runCardsBuffer)
+        changerunImages(runImagesBuffer)
         changeThird(false)
         changeFirst(true)
+        console.log(dealerCards)
     }
 
     return (
@@ -1029,10 +1171,10 @@ export default function Rummy() {
                         <div className="stock-title-container">
                             <h1 className="stocker">Stock</h1>
                             <div className="stock-container">
-                                <button>
+                                <button onClick={stockEnding}>
                                     <img className="players-card" src="./cards/back.png" alt="stockblank"/>
                                 </button>
-                                <button>
+                                <button onClick={discardEnding}>
                                     <img className="players-card" src={`./cards/${stockImage}.png`} alt="stockcard"/>
                                 </button>
                             </div>
@@ -1043,7 +1185,7 @@ export default function Rummy() {
                             {canMeld &&
                                 <button className="play-btn" onClick={wantsMeld}>Meld/Run?</button>
                             }
-                        <button className="play-btn" onClick={endTurn}>End Turn?</button>
+                        <button className="play-btn" onClick={discarding}>End Turn?</button>
                         </>
                         }
                         {melding &&
@@ -1080,6 +1222,15 @@ export default function Rummy() {
                             </div>
                             <img className="players-card" src={`./cards/${layoffImage}.png`} alt="layoff card"/>
                             <button className="play-btn" onClick={goBack}>Back?</button>
+                        </>
+                        }
+                        {endingTurn &&
+                        <>
+                            <div>
+                                <h1 className="meld-title">Choose a card to discard</h1>
+                                <h1 className="meld-title">Then click the stock or discard pile</h1>
+                            </div>
+                            <img className="players-card" src={`./cards/${discardImage}.png`} alt="discard card"/>
                         </>
                         }
                     </div>
