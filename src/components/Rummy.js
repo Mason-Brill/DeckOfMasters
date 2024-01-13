@@ -66,6 +66,8 @@ export default function Rummy() {
         changeSecond(false)
         changeThird(false)
         changeFourth(false)
+        changeMeld(false)
+        changelayoffOrMeld(false)
     }
 
     function starting() {
