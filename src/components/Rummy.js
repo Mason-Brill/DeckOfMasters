@@ -1,14 +1,15 @@
 import {React, useState} from "react";
 
 export default function Rummy() {
-    const [rounds, changeRounds] = useState(true)
-    const [start, changeStart] = useState(false)
+    const [start, changeStart] = useState(true)
     const [drawing, changeDrawing] = useState(false)
     const [first, changeFirst] = useState(false)
     const [second, changeSecond] = useState(false)
     const [third, changeThird] = useState(false)
+    const [fourth, changeFourth] = useState(false)
     const [switcher, changeSwitcher] = useState(false)
-    const [numRounds, changenumRounds] = useState(0)
+    const [playerTotal, changeplayerTotal] =useState(0)
+    const [dealerTotal, changedealerTotal] = useState(0)
     const [starter, changeStarter] = useState("")
     const [layoffOrMeld, changelayoffOrMeld] = useState(true)
     const [melding, changeMeld] = useState(false)
@@ -19,6 +20,7 @@ export default function Rummy() {
     const [discardImage, changediscardImage] = useState("back")
     const [discardValue, changediscardValue] = useState(0)
     const [discardIndex, changediscardIndex] = useState(0)
+    const [winner, changeWinner] = useState("None")
 
     //cards used when determing who draws first
     const [card1, changeCard1] = useState("back")
@@ -58,22 +60,11 @@ export default function Rummy() {
     let random3 = 0
     let random4 = 0
 
-    function oneRound() {
-        changenumRounds(1)
-        changeRounds(false)
+    function newRound(){
         changeStart(true)
-    }
-
-    function twoRound() {
-        changenumRounds(2)
-        changeRounds(false)
-        changeStart(true)
-    }
-
-    function threeRound() {
-        changenumRounds(3)
-        changeRounds(false)
-        changeStart(true)
+        changeFirst(false)
+        changeSecond(false)
+        changeThird(false)
     }
 
     function starting() {
@@ -228,12 +219,20 @@ export default function Rummy() {
             playerCards.splice(discardIndex, 1)
             playerImages.splice(discardIndex, 1)
 
-            changediscardImage("back")
-            changediscardValue(0)
-            changediscardIndex(0)
-            changeendingTurn(false)
-            changelayoffOrMeld(true)
-            endTurn()
+            if(playerCards.length === 0){
+                changeThird(false)
+                changeSecond(false)
+                changeFourth(true)
+                changeWinner("Player")
+            }
+            else{
+                changediscardImage("back")
+                changediscardValue(0)
+                changediscardIndex(0)
+                changeendingTurn(false)
+                changelayoffOrMeld(true)
+                endTurn()
+            }
         }
     }
 
@@ -242,12 +241,34 @@ export default function Rummy() {
         if(discardImage !== "back"){
             playerCards.splice(discardIndex, 1)
             playerImages.splice(discardIndex, 1)
-            changediscardImage("back")
-            changediscardValue(0)
-            changediscardIndex(0)
-            changeendingTurn(false)
-            changelayoffOrMeld(true)
-            endTurn()
+            
+            if(playerCards.length === 0){
+                changeThird(false)
+                changeSecond(false)
+                changeFourth(true)
+                changeWinner("Player")
+
+                console.log(dealerCards)
+                let total = 0
+                for(let i=0;i<dealerCards.length-1;i++){
+                    if(dealerCards[i]>10){
+                        total = total + 10
+                    }
+                    else{
+                        total = total + dealerCards[i]
+                    }
+                }
+
+                changeplayerTotal(total)
+            }
+            else{
+                changediscardImage("back")
+                changediscardValue(0)
+                changediscardIndex(0)
+                changeendingTurn(false)
+                changelayoffOrMeld(true)
+                endTurn()
+            }
         }
     }
 
@@ -504,6 +525,12 @@ export default function Rummy() {
     }
 
     function discarding() {
+        if(playerCards.length === 0){
+            changeWinner("Player")
+            changeThird(false)
+            changeSecond(false)
+            changeFourth(true)
+        }
         changeendingTurn(true)
         changelayoffOrMeld(false)
     }
@@ -808,22 +835,30 @@ export default function Rummy() {
         changerunImages(runImagesBuffer)
         changeThird(false)
         changeFirst(true)
-        console.log(dealerCards)
+
+        if(DealersCardsBuffer.length === 0){
+            changeSecond(false)
+            changeFirst(false)
+            changeThird(false)
+            changeFourth(true)
+            changeWinner("Dealer")
+
+            console.log(playerCards)
+            let total = 0
+            for(let i=0;i<playerCards.length-1;i++){
+                if(playerCards[i]>10){
+                    total = total + 10
+                }
+                else{
+                    total = total + playerCards[i]
+                }
+            }
+
+            changedealerTotal(total)
+        }
     }
 
     return (
-        <>
-            {rounds ? (
-            <>
-                <h1 className="war-title">Rummy</h1>
-                <h2 className="war-title">How many rounds would you like to play:</h2>
-                <div className="rounds-container">
-                    <button className="rounds-element" onClick={oneRound}>1</button>
-                    <button className="rounds-element" onClick={twoRound}>2</button>
-                    <button className="rounds-element" onClick={threeRound}>3</button>
-                </div>
-            </>
-            ):(
             <> 
                 {start &&
                 <>
@@ -911,7 +946,7 @@ export default function Rummy() {
                     </div>
                     <div className="meld-run-container">
                         <div className="mr-cards">
-                            <h1 className="war-title">Meld Hands:</h1>
+                            <h1 className="war-title">Sets:</h1>
                             
                             {meldImages.map((row, rowIndex) => {
 
@@ -986,7 +1021,7 @@ export default function Rummy() {
                                 })}
                         </div>
                         <div className="mr-cards">
-                            <h1 className="war-title">Run Hands:</h1>
+                            <h1 className="war-title">Runs:</h1>
                             {runImages.map((row, rowIndex) => {
 
                             let index = 0
@@ -1183,7 +1218,7 @@ export default function Rummy() {
                         <>
                         <button className="play-btn" onClick={wantsLayoff}>Layoff?</button>
                             {canMeld &&
-                                <button className="play-btn" onClick={wantsMeld}>Meld/Run?</button>
+                                <button className="play-btn" onClick={wantsMeld}>Meld?</button>
                             }
                         <button className="play-btn" onClick={discarding}>End Turn?</button>
                         </>
@@ -1191,8 +1226,8 @@ export default function Rummy() {
                         {melding &&
                         <>
                             <div>
-                                <h1 className="meld-title">Choose cards to Meld/Run</h1>
-                                <h1 className="meld-title">place cards in increasing order</h1>
+                                <h1 className="meld-title">Choose cards to form a Set/Run</h1>
+                                <h1 className="meld-title">place cards in increasing order for run</h1>
                             </div>
                             <div className="meld-cards">
                                 <button onClick={remove1}>
@@ -1236,7 +1271,7 @@ export default function Rummy() {
                     </div>
                     <div className="meld-run-container">
                         <div className="mr-cards">
-                            <h1 className="war-title">Meld Hands:</h1>
+                            <h1 className="war-title">Sets:</h1>
                             
 
 
@@ -1314,7 +1349,7 @@ export default function Rummy() {
                                 })}
                         </div>
                         <div className="mr-cards">
-                            <h1 className="war-title">Run Hands:</h1>
+                            <h1 className="war-title">Runs:</h1>
                             {runImages.map((row, rowIndex) => {
 
                             let index = 0
@@ -1391,11 +1426,17 @@ export default function Rummy() {
                 </>
                 }
                 {third &&
-            
                     dealersTurn()
                 }
+                {fourth &&
+                <>
+                    <h1 className="rum-text">Round Over</h1>
+                    <h1 className="rum-text">{winner} wins this round</h1>
+                    <h1 className="rum-text">total dealer points: {dealerTotal}</h1>
+                    <h1 className="rum-text">total player points: {playerTotal}</h1>
+                    <button className="play-btn" onClick={newRound}>Play another round?</button>
+                </>
+                }
             </>
-            )}
-        </>
     )
 }
