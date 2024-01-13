@@ -111,22 +111,18 @@ export default function Blackjack(){
         changeDealerCards(prevDealerCards => [...prevDealerCards, number1]);
     }
 
+    const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
     function hit() {
 
         let sump = playerCards.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
         if(sump < 21)
         {
             //generate random number between 1-13
-            number1 = Math.floor(Math.random() * 13) + 1;
+            number1 = getRandomNumber(1,13);
 
-            //generate random number between 0-3 and times it by 100
-            number2 = Math.floor(Math.random() * 4);
-            if(number2 === 0){
-                number2 = number2 + 100;
-            }
-            else {
-                number2 = number2 * 100
-            }
+            //generate random number between 1-4 and times it by 100
+            number2 = getRandomNumber(1,4) * 100;
 
             const playerImage = number1 + number2
 

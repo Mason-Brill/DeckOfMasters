@@ -66,6 +66,56 @@ button {
   font-family: 'Playfair Display', serif;
 }
 
+@media (max-width: 1000px){
+  .choice-img{
+    min-width: 25vw;
+    height: 25vh !important;
+  }
+  .choice-text{
+    font-size: 42pt !important;
+  }
+  .navbar{
+    width: 100;
+  }
+  .image{
+    height: 8vh !important;
+  }
+  .nav-element{
+    margin-top: 3vh;
+    font-size: 26pt !important;
+  }
+
+  .war-card1{
+    width: 20vw !important;
+  }
+
+  .war-card2{
+    width: 20vw !important;
+  }
+
+  .play-btn{
+    width: 40vw;
+    height: 5vh;
+    border-radius: 40% !important;
+  }
+
+  .player1, .player2, .winner{
+    font-size: 40pt !important;
+  }
+  
+  .players-card{
+    width: 15vw !important;
+    height: 20vh !important;
+  }
+
+  .option2 {
+    display: flex;
+    flex-direction: column;
+    gap: 5vw !important;
+    justify-content: center !important;
+  }
+}
+
 .title {
   display: flex;
   margin-left: 20px;
@@ -181,6 +231,19 @@ button {
   animation-duration: 3s;
 }
 
+.meld-btn {
+  font-size: 36pt;
+  color: goldenrod;
+  background-color: rgba(0, 100, 0 , 0.75);
+  border-radius: 20%;
+  animation-name: fade1;
+  animation-duration: 3s;
+  width: 20vw;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .players-cont {
   display: flex;
   gap: 10vw;
@@ -290,6 +353,13 @@ button {
 }
 
 .options-container {
+  display: flex;
+  gap: 2vw;
+  margin-left: 5vw;
+  margin-right: 5vw;
+}
+
+.option2{
   display: flex;
   gap: 2vw;
   margin-left: 5vw;

@@ -65,6 +65,7 @@ export default function Rummy() {
         changeFirst(false)
         changeSecond(false)
         changeThird(false)
+        changeFourth(false)
     }
 
     function starting() {
@@ -1215,39 +1216,41 @@ export default function Rummy() {
                             </div>
                         </div>
                         {layoffOrMeld &&
-                        <>
+                        <div>
                         <button className="play-btn" onClick={wantsLayoff}>Layoff?</button>
                             {canMeld &&
                                 <button className="play-btn" onClick={wantsMeld}>Meld?</button>
                             }
                         <button className="play-btn" onClick={discarding}>End Turn?</button>
-                        </>
+                        </div>
                         }
                         {melding &&
-                        <>
+                        <div className="option2">
+                        <div className="meld-container">
                             <div>
                                 <h1 className="meld-title">Choose cards to form a Set/Run</h1>
                                 <h1 className="meld-title">place cards in increasing order for run</h1>
                             </div>
                             <div className="meld-cards">
                                 <button onClick={remove1}>
-                                    <img src={`./cards/${meld1Image}.png`} alt="first meld card"/>
+                                    <img className="players-card" src={`./cards/${meld1Image}.png`} alt="first meld card"/>
                                 </button>
                                 <button onClick={remove2}>
-                                    <img src={`./cards/${meld2Image}.png`} alt="second meld card"/>
+                                    <img className="players-card" src={`./cards/${meld2Image}.png`} alt="second meld card"/>
                                 </button>
                                 <button onClick={remove3}>
-                                    <img src={`./cards/${meld3Image}.png`} alt="third meld card"/>
+                                    <img className="players-card" src={`./cards/${meld3Image}.png`} alt="third meld card"/>
                                 </button>
                             </div>
-                            <button className="play-btn" onClick={meld}>
-                                Meld?
+                        </div>
+                            <button className="meld-btn" onClick={meld}>
+                                Set?
                             </button>
-                            <button className="play-btn" onClick={run}>
+                            <button className="meld-btn" onClick={run}>
                                 Run?
                             </button>
-                            <button className="play-btn" onClick={goBack}>Back?</button>
-                        </>
+                            <button className="meld-btn" onClick={goBack}>Back?</button>
+                        </div>
                         }
                         {layoff &&
                         <>
