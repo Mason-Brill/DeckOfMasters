@@ -227,6 +227,19 @@ export default function Rummy() {
                 changeSecond(false)
                 changeFourth(true)
                 changeWinner("Player")
+
+                console.log(dealerCards)
+                let total = 0
+                for(let i=0;i<dealerCards.length-1;i++){
+                    if(dealerCards[i]>10){
+                        total = total + 10
+                    }
+                    else{
+                        total = total + dealerCards[i]
+                    }
+                }
+
+                changeplayerTotal(total)
             }
             else{
                 changediscardImage("back")
@@ -529,10 +542,24 @@ export default function Rummy() {
 
     function discarding() {
         if(playerCards.length === 0){
+            console.log("player has no cards left, ending round and adding points to players total points")
             changeThird(false)
             changeSecond(false)
             changeFourth(true)
             changeWinner("Player")
+
+            console.log(dealerCards)
+            let total = 0
+            for(let i=0;i<dealerCards.length-1;i++){
+                if(dealerCards[i]>10){
+                    total = total + 10
+                }
+                else{
+                    total = total + dealerCards[i]
+                }
+            }
+
+            changeplayerTotal(total)
         }
         else{
             changeendingTurn(true)
