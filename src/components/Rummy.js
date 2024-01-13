@@ -527,13 +527,15 @@ export default function Rummy() {
 
     function discarding() {
         if(playerCards.length === 0){
-            changeWinner("Player")
             changeThird(false)
             changeSecond(false)
             changeFourth(true)
+            changeWinner("Player")
         }
-        changeendingTurn(true)
-        changelayoffOrMeld(false)
+        else{
+            changeendingTurn(true)
+            changelayoffOrMeld(false)
+        }
     }
 
     function endTurn() {
