@@ -114,6 +114,19 @@ button {
     gap: 5vw !important;
     justify-content: center !important;
   }
+
+  .meld-btn {
+    font-size: 36pt;
+    color: goldenrod;
+    background-color: rgba(0, 100, 0 , 0.75);
+    border-radius: 20%;
+    animation-name: fade1;
+    animation-duration: 3s;
+    width: 20vw;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .title {
@@ -232,16 +245,17 @@ button {
 }
 
 .meld-btn {
+  margin-top: 5vh;
   font-size: 36pt;
   color: goldenrod;
   background-color: rgba(0, 100, 0 , 0.75);
   border-radius: 20%;
-  animation-name: fade1;
-  animation-duration: 3s;
-  width: 20vw;
-  text-align: center;
+  display: block;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 5vh;
+  animation-name: fade1;
+  animation-duration: 3s;
 }
 
 .players-cont {
