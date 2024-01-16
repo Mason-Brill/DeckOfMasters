@@ -68,6 +68,8 @@ export default function Rummy() {
         changeFourth(false)
         changeMeld(false)
         changelayoffOrMeld(false)
+        changecanMeld(true)
+        changeendingTurn(false)
     }
 
     function starting() {
@@ -230,7 +232,7 @@ export default function Rummy() {
 
                 console.log(dealerCards)
                 let total = 0
-                for(let i=0;i<dealerCards.length-1;i++){
+                for(let i=0;i<dealerCards.length;i++){
                     if(dealerCards[i]>10){
                         total = total + 10
                     }
@@ -239,7 +241,7 @@ export default function Rummy() {
                     }
                 }
 
-                changeplayerTotal(total)
+                changeplayerTotal(total + playerTotal)
             }
             else{
                 changediscardImage("back")
@@ -266,7 +268,7 @@ export default function Rummy() {
 
                 console.log(dealerCards)
                 let total = 0
-                for(let i=0;i<dealerCards.length-1;i++){
+                for(let i=0;i<dealerCards.length;i++){
                     if(dealerCards[i]>10){
                         total = total + 10
                     }
@@ -275,7 +277,7 @@ export default function Rummy() {
                     }
                 }
 
-                changeplayerTotal(total)
+                changeplayerTotal(total + playerTotal)
             }
             else{
                 changediscardImage("back")
@@ -405,12 +407,56 @@ export default function Rummy() {
             const bufferPlayerCard = playerCards
             const bufferPlayerImages = playerImages
 
-            bufferPlayerCard.splice(meld1Index,1)
-            bufferPlayerImages.splice(meld1Index,1)
-            bufferPlayerCard.splice(meld2Index,1)
-            bufferPlayerImages.splice(meld2Index,1)
-            bufferPlayerCard.splice(meld3Index,1)
-            bufferPlayerImages.splice(meld3Index,1)
+            if((meld1Index>meld2Index)&&(meld1Index>meld3Index)){
+                bufferPlayerCard.splice(meld1Index,1)
+                bufferPlayerImages.splice(meld1Index,1)
+                if(meld2Index>meld3Index){
+                    bufferPlayerCard.splice(meld2Index,1)
+                    bufferPlayerImages.splice(meld2Index,1)
+                    bufferPlayerCard.splice(meld3Index,1)
+                    bufferPlayerImages.splice(meld3Index,1)
+                }
+                else{
+                    bufferPlayerCard.splice(meld3Index,1)
+                    bufferPlayerImages.splice(meld3Index,1)
+                    bufferPlayerCard.splice(meld2Index,1)
+                    bufferPlayerImages.splice(meld2Index,1)
+                }
+            }
+
+            if((meld2Index>meld1Index)&&(meld2Index>meld3Index)){
+                bufferPlayerCard.splice(meld2Index,1)
+                bufferPlayerImages.splice(meld2Index,1)
+                if(meld1Index>meld3Index){
+                    bufferPlayerCard.splice(meld1Index,1)
+                    bufferPlayerImages.splice(meld1Index,1)
+                    bufferPlayerCard.splice(meld3Index,1)
+                    bufferPlayerImages.splice(meld3Index,1)
+                }
+                else{
+                    bufferPlayerCard.splice(meld3Index,1)
+                    bufferPlayerImages.splice(meld3Index,1)
+                    bufferPlayerCard.splice(meld1Index,1)
+                    bufferPlayerImages.splice(meld1Index,1)
+                }
+            }
+
+            if((meld3Index>meld2Index)&&(meld3Index>meld1Index)){
+                bufferPlayerCard.splice(meld3Index,1)
+                bufferPlayerImages.splice(meld3Index,1)
+                if(meld2Index>meld1Index){
+                    bufferPlayerCard.splice(meld2Index,1)
+                    bufferPlayerImages.splice(meld2Index,1)
+                    bufferPlayerCard.splice(meld1Index,1)
+                    bufferPlayerImages.splice(meld1Index,1)
+                }
+                else{
+                    bufferPlayerCard.splice(meld1Index,1)
+                    bufferPlayerImages.splice(meld1Index,1)
+                    bufferPlayerCard.splice(meld2Index,1)
+                    bufferPlayerImages.splice(meld2Index,1)
+                }
+            }
 
             changePlayerCards(bufferPlayerCard)
             changePlayerImages(bufferPlayerImages)
@@ -449,12 +495,56 @@ export default function Rummy() {
                 const bufferPlayerCard = playerCards
                 const bufferPlayerImages = playerImages
 
-                bufferPlayerCard.splice(meld1Index,1)
-                bufferPlayerImages.splice(meld1Index,1)
-                bufferPlayerCard.splice(meld2Index,1)
-                bufferPlayerImages.splice(meld2Index,1)
-                bufferPlayerCard.splice(meld3Index,1)
-                bufferPlayerImages.splice(meld3Index,1)
+                if((meld1Index>meld2Index)&&(meld1Index>meld3Index)){
+                    bufferPlayerCard.splice(meld1Index,1)
+                    bufferPlayerImages.splice(meld1Index,1)
+                    if(meld2Index>meld3Index){
+                        bufferPlayerCard.splice(meld2Index,1)
+                        bufferPlayerImages.splice(meld2Index,1)
+                        bufferPlayerCard.splice(meld3Index,1)
+                        bufferPlayerImages.splice(meld3Index,1)
+                    }
+                    else{
+                        bufferPlayerCard.splice(meld3Index,1)
+                        bufferPlayerImages.splice(meld3Index,1)
+                        bufferPlayerCard.splice(meld2Index,1)
+                        bufferPlayerImages.splice(meld2Index,1)
+                    }
+                }
+    
+                if((meld2Index>meld1Index)&&(meld2Index>meld3Index)){
+                    bufferPlayerCard.splice(meld2Index,1)
+                    bufferPlayerImages.splice(meld2Index,1)
+                    if(meld1Index>meld3Index){
+                        bufferPlayerCard.splice(meld1Index,1)
+                        bufferPlayerImages.splice(meld1Index,1)
+                        bufferPlayerCard.splice(meld3Index,1)
+                        bufferPlayerImages.splice(meld3Index,1)
+                    }
+                    else{
+                        bufferPlayerCard.splice(meld3Index,1)
+                        bufferPlayerImages.splice(meld3Index,1)
+                        bufferPlayerCard.splice(meld1Index,1)
+                        bufferPlayerImages.splice(meld1Index,1)
+                    }
+                }
+    
+                if((meld3Index>meld2Index)&&(meld3Index>meld1Index)){
+                    bufferPlayerCard.splice(meld3Index,1)
+                    bufferPlayerImages.splice(meld3Index,1)
+                    if(meld2Index>meld1Index){
+                        bufferPlayerCard.splice(meld2Index,1)
+                        bufferPlayerImages.splice(meld2Index,1)
+                        bufferPlayerCard.splice(meld1Index,1)
+                        bufferPlayerImages.splice(meld1Index,1)
+                    }
+                    else{
+                        bufferPlayerCard.splice(meld1Index,1)
+                        bufferPlayerImages.splice(meld1Index,1)
+                        bufferPlayerCard.splice(meld2Index,1)
+                        bufferPlayerImages.splice(meld2Index,1)
+                    }
+                }
 
                 changePlayerCards(bufferPlayerCard)
                 changePlayerImages(bufferPlayerImages)
@@ -550,7 +640,7 @@ export default function Rummy() {
 
             console.log(dealerCards)
             let total = 0
-            for(let i=0;i<dealerCards.length-1;i++){
+            for(let i=0;i<dealerCards.length;i++){
                 if(dealerCards[i]>10){
                     total = total + 10
                 }
@@ -559,7 +649,7 @@ export default function Rummy() {
                 }
             }
 
-            changeplayerTotal(total)
+            changeplayerTotal(total + playerTotal)
         }
         else{
             changeendingTurn(true)
@@ -877,7 +967,7 @@ export default function Rummy() {
 
             console.log(playerCards)
             let total = 0
-            for(let i=0;i<playerCards.length-1;i++){
+            for(let i=0;i<playerCards.length;i++){
                 if(playerCards[i]>10){
                     total = total + 10
                 }
@@ -886,7 +976,7 @@ export default function Rummy() {
                 }
             }
 
-            changedealerTotal(total)
+            changedealerTotal(total + dealerTotal)
         }
     }
 
