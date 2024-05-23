@@ -4,7 +4,7 @@ More game will be added in the future. This was created using React, Javascript,
 which provides an extremely simplistic way to deploy react applications.
 
 How It Works - 
-As I previously stated, this website uses React, so it is a single page web application. The initial screen is a "menu", where
+This website uses React, so it is a single page web application. The initial screen is a "menu", where
 the user can select what card game they want to play and then that specific choice is rendered on-screen.
 
 What was learned/What I would do differently next time -
@@ -12,4 +12,4 @@ For startes, this was primarily a learning expierence, so it should come with no
 first change I would make is that I would break the react components into smaller pieces as I know this is the best practice
 for avoiding large Javascript bundles along with slow render times. Second, there are very few comments which I regretfully
 got carried away with not doing them. The third would be to optimize the code better. I was so focused on getting the website
-tow work that I was not all too worried with how the code actually performed.
+to work that I was not too worried with how the code actually performed.
