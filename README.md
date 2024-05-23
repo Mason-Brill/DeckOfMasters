@@ -1,5 +1,5 @@
 Description - 
-This is an ongoing project at the moment. It is currently deployed with three card games which are war, blackjack, and rummy.
+Three card games which are war, blackjack, and rummy.
 More game will be added in the future. This was created using React, Javascript, CSS, and HTML. It is hosted through vercel
 which provides an extremely simplistic way to deploy react applications.
 
